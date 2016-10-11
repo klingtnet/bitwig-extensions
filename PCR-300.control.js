@@ -8,6 +8,7 @@ host.addDeviceNameBasedDiscoveryPair(["PCR MIDI", "PCR 1", "PCR 2"], ["PCR MIDI"
 var transport; // a view onto bitwig's transport section
 var cursorDevice;
 var masterTrack;
+var trackBank;
 
 const MIDI_RES = 128;
 
@@ -15,8 +16,9 @@ const MIDI_RES = 128;
 // See the README.md for instructions on how to change or reset the control map.
 function init() {
   transport = host.createTransport();
-  cursorDevice = host.createCursorDevice(); // tracks, sends, scenes
+  cursorDevice = host.createCursorDevice();
   masterTrack = host.createMasterTrack(0);
+  trackBank = host.createMainTrackBank(8, 0, 0); // tracks, sends
 
   // Note input, exclude filtered messages from callback
   host.getMidiInPort(1).createNoteInput("PCR-300", "8?????" // Note On
@@ -86,6 +88,17 @@ var controlMap = {
       var macro = cursorDevice.getMacro(getChannel(status));
       if (macro != null) {
         macro.getAmount().set(data2, MIDI_RES);
+      }
+    }
+  },
+  "volumeFader": {
+    "match": function(channel, data1) {
+      return channel < 8 && data1 === 17;
+    },
+    "func": function(status, data1, data2) {
+      var track = trackBank.getTrack(getChannel(status));
+      if (track != null) {
+        track.getVolume().set(data2, MIDI_RES);
       }
     }
   }
