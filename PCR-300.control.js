@@ -77,6 +77,17 @@ var controlMap = {
     "func": function(status, data1, data2) {
       masterTrack.getVolume().set(data2, MIDI_RES);
     }
+  },
+  "macroKnobs": {
+    "match": function(channel, data1) {
+      return channel < 8 && data1 === 16;
+    },
+    "func": function(status, data1, data2) {
+      var macro = cursorDevice.getMacro(getChannel(status));
+      if (macro != null) {
+        macro.getAmount().set(data2, MIDI_RES);
+      }
+    }
   }
 };
 
