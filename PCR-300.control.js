@@ -92,7 +92,6 @@ var controlMap = {
 };
 
 function midiInPCR2(status, data1, data2) {
-  println(status + "(" + getChannel(status) + "), " + data1 + ", " + data2);
   if (isChannelController(status)) {
     for (var key in controlMap) {
       match = controlMap[key].match;
