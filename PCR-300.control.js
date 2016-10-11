@@ -17,7 +17,7 @@ function init() {
 var controlMap = {
   "play": [14, 82],
   "stop": [13, 82],
-  "rewind": [12, 82],
+  "rewind": [8, 82],
   "record": [10, 82]
 };
 
