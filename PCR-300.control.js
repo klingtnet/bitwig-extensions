@@ -11,6 +11,16 @@ var transport; // a view onto bitwig's transport section
 // See the README.md for instructions on how to change or reset the control map.
 function init() {
   transport = host.createTransport();
+
+  // Note input, exclude filtered messages from callback
+  host.getMidiInPort(1).createNoteInput("PCR-300"
+    , "8?????"    // Note On
+    , "9?????"    // Note Off
+    , "B?40??"    // Damper Pedal
+    , "D?????"    // Channel Pressue / After-Touch
+    , "E?????");  // Pitch Bend
+
+  // Control input
   host.getMidiInPort(2).setMidiCallback(midiInPCR2);
 }
 
