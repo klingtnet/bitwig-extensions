@@ -8,8 +8,11 @@ host.addDeviceNameBasedDiscoveryPair(["PCR MIDI", "PCR 1", "PCR 2"], ["PCR MIDI"
 var transport; // a view onto bitwig's transport section
 var cursorDevice;
 var cursorTrack;
+var cursorClip;
 var masterTrack;
 var trackBank;
+
+var seqRoot = 36;
 
 const MIDI_RES = 128;
 
@@ -19,6 +22,7 @@ function init() {
   transport = host.createTransport();
   cursorDevice = host.createCursorDevice();
   cursorTrack = host.createCursorTrack(0, 0); // sends, scenes
+  cursorClip = host.createCursorClip(8, 2); // grid width, height
   masterTrack = host.createMasterTrack(0);
   trackBank = host.createMainTrackBank(8, 0, 0); // tracks, sends
 
@@ -131,6 +135,31 @@ var controlMap = {
       var track = trackBank.getTrack(getChannel(status));
       if (track != null) {
         track.getVolume().set(data2, MIDI_RES);
+      }
+    }
+  },
+  "clipScroll": {
+    "match": function(channel, data1) {
+      return channel < 2 && data1 == 83;
+    },
+    "func": function(status, data1, data2) {
+      if (data2 === 127) {
+        if (getChannel(status) == 0) {
+          seqRoot++;
+        } else {
+          seqRoot--;
+        }
+        println(seqRoot);
+      }
+    }
+  },
+  "clipPattern": {
+    "match": function(channel, data1) {
+      return channel < 8 && (data1 == 80 || data1 == 81);
+    },
+    "func": function(status, data1, data2) {
+      if (data2 === 127) {
+        cursorClip.toggleStep(getChannel(status) + 8*(data1 - 80), seqRoot, 100);
       }
     }
   }
