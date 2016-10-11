@@ -15,29 +15,29 @@ function init() {
 }
 
 var controlMap = {
-  'play': [14, 82],
-  'stop': [13, 82],
-  'rewind': [12, 82],
-  'record': [10, 82]
+  "play": [14, 82],
+  "stop": [13, 82],
+  "rewind": [12, 82],
+  "record": [10, 82]
 };
 
 var actionMap = {
-  'play': function(status, data1, data2) {
+  "play": function(status, data1, data2) {
     if(data2 === 127) {
       transport.play();
     }
   },
-  'stop': function(status, data1, data2) {
+  "stop": function(status, data1, data2) {
     if(data2 === 127) {
       transport.stop();
     }
   },
-  'rewind': function(status, data1, data2) {
+  "rewind": function(status, data1, data2) {
     if(data2 === 127) {
       transport.rewind();
     }
   },
-  'record': function(status, data1, data2) {
+  "record": function(status, data1, data2) {
     if(data2 === 127) {
       transport.record();
     }
