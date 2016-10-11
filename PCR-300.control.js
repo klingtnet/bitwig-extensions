@@ -6,11 +6,15 @@ host.defineMidiPorts(3, 2);
 host.addDeviceNameBasedDiscoveryPair(["PCR MIDI", "PCR 1", "PCR 2"], ["PCR MIDI", "PCR 1"]);
 
 var transport; // a view onto bitwig's transport section
+var masterTrack;
+
+const MIDI_RES = 128;
 
 // This script is written for "control map" 0 of the PCR keyboard.
 // See the README.md for instructions on how to change or reset the control map.
 function init() {
   transport = host.createTransport();
+  masterTrack = host.createMasterTrack(0);
 
   // Note input, exclude filtered messages from callback
   host.getMidiInPort(1).createNoteInput("PCR-300"
@@ -28,7 +32,8 @@ var controlMap = {
   "play": [14, 82],
   "stop": [13, 82],
   "rewind": [8, 82],
-  "record": [10, 82]
+  "record": [10, 82],
+  "masterFader": [1, 18]
 };
 
 var actionMap = {
@@ -51,6 +56,9 @@ var actionMap = {
     if(data2 === 127) {
       transport.record();
     }
+  },
+  "masterFader": function(status, data1, data2) {
+    masterTrack.getVolume().set(data2, MIDI_RES);
   }
 }
 
