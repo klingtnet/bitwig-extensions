@@ -31,7 +31,9 @@ function init() {
 
 var controlMap = {
   "play": {
-    "addr": [14, 82],
+    "match": function(channel, data1) {
+      return channel === 14 && data1 == 82
+    },
     "func": function(status, data1, data2) {
       if (data2 === 127) {
         transport.play();
@@ -39,7 +41,9 @@ var controlMap = {
     }
   },
   "stop": {
-    "addr": [13, 82],
+    "match": function(channel, data1) {
+      return channel === 13 && data1 == 82
+    },
     "func": function(status, data1, data2) {
       if (data2 === 127) {
         transport.stop();
@@ -47,7 +51,9 @@ var controlMap = {
     }
   },
   "rewind": {
-    "addr": [8, 82],
+    "match": function(channel, data1) {
+      return channel === 8 && data1 == 82
+    },
     "func": function(status, data1, data2) {
       if (data2 === 127) {
         transport.rewind();
@@ -55,7 +61,9 @@ var controlMap = {
     }
   },
   "record": {
-    "addr": [10, 82],
+    "match": function(channel, data1) {
+      return channel === 10 && data1 == 82
+    },
     "func": function(status, data1, data2) {
       if (data2 === 127) {
         transport.record();
@@ -63,7 +71,9 @@ var controlMap = {
     }
   },
   "masterFader": {
-    "addr": [1, 18],
+    "match": function(channel, data1) {
+      return channel === 1 && data1 == 18
+    },
     "func": function(status, data1, data2) {
       masterTrack.getVolume().set(data2, MIDI_RES);
     }
@@ -74,9 +84,9 @@ function midiInPCR2(status, data1, data2) {
   println(status + "(" + channel(status) + "), " + data1 + ", " + data2);
   if (isChannelController(status)) {
     for (var key in controlMap) {
-      ctrl = controlMap[key].addr;
+      match = controlMap[key].match;
       func = controlMap[key].func;
-      if (ctrl[0] === channel(status) && ctrl[1] === data1) {
+      if (match(channel(status), data1)) {
         func(status, data1, data2);
       }
     }
