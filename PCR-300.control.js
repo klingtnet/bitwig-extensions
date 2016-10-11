@@ -32,7 +32,7 @@ function init() {
 var controlMap = {
   "play": {
     "match": function(channel, data1) {
-      return channel === 14 && data1 == 82
+      return channel === 14 && data1 == 82;
     },
     "func": function(status, data1, data2) {
       if (data2 === 127) {
@@ -42,7 +42,7 @@ var controlMap = {
   },
   "stop": {
     "match": function(channel, data1) {
-      return channel === 13 && data1 == 82
+      return channel === 13 && data1 == 82;
     },
     "func": function(status, data1, data2) {
       if (data2 === 127) {
@@ -52,7 +52,7 @@ var controlMap = {
   },
   "rewind": {
     "match": function(channel, data1) {
-      return channel === 8 && data1 == 82
+      return channel === 8 && data1 == 82;
     },
     "func": function(status, data1, data2) {
       if (data2 === 127) {
@@ -62,7 +62,7 @@ var controlMap = {
   },
   "record": {
     "match": function(channel, data1) {
-      return channel === 10 && data1 == 82
+      return channel === 10 && data1 == 82;
     },
     "func": function(status, data1, data2) {
       if (data2 === 127) {
@@ -72,7 +72,7 @@ var controlMap = {
   },
   "masterFader": {
     "match": function(channel, data1) {
-      return channel === 1 && data1 == 18
+      return channel === 1 && data1 == 18;
     },
     "func": function(status, data1, data2) {
       masterTrack.getVolume().set(data2, MIDI_RES);
