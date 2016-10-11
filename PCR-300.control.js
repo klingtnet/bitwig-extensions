@@ -7,6 +7,7 @@ host.addDeviceNameBasedDiscoveryPair(["PCR MIDI", "PCR 1", "PCR 2"], ["PCR MIDI"
 
 var transport; // a view onto bitwig's transport section
 var cursorDevice;
+var cursorTrack;
 var masterTrack;
 var trackBank;
 
@@ -17,6 +18,7 @@ const MIDI_RES = 128;
 function init() {
   transport = host.createTransport();
   cursorDevice = host.createCursorDevice();
+  cursorTrack = host.createCursorTrack(0, 0); // sends, scenes
   masterTrack = host.createMasterTrack(0);
   trackBank = host.createMainTrackBank(8, 0, 0); // tracks, sends
 
@@ -69,6 +71,36 @@ var controlMap = {
     "func": function(status, data1, data2) {
       if (data2 === 127) {
         transport.record();
+      }
+    }
+  },
+  "arm": {
+    "match": function(channel, data1) {
+      return channel === 0 && data1 === 82;
+    },
+    "func": function(status, data1, data2) {
+      if (data2 === 127) {
+        cursorTrack.getArm().toggle();
+      }
+    }
+  },
+  "solo": {
+    "match": function(channel, data1) {
+      return channel === 1 && data1 === 82;
+    },
+    "func": function(status, data1, data2) {
+      if (data2 === 127) {
+        cursorTrack.getSolo().toggle();
+      }
+    }
+  },
+  "mute": {
+    "match": function(channel, data1) {
+      return channel === 2 && data1 === 82;
+    },
+    "func": function(status, data1, data2) {
+      if (data2 === 127) {
+        cursorTrack.getMute().toggle();
       }
     }
   },
