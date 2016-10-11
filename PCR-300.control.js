@@ -41,7 +41,7 @@ var actionMap = {
     if(data2 === 127) {
       transport.record();
     }
-  },
+  }
 }
 
 function midiInPCR2(status, data1, data2) {
