@@ -51,28 +51,30 @@ var controlMap = {
       return false;
     },
     "action": function(status, data1, data2) {
-      switch (getChannel(status)) {
-        case 14:
-          transport.play();
-          break;
-        case 13:
-          transport.stop();
-          break;
-        case 8:
-          transport.rewind();
-          break;
-        case 10:
-          transport.record();
-          break;
-        case 0:
-          cursorTrack.getArm().toggle();
-          break;
-        case 1:
-          cursorTrack.getSolo().toggle();
-          break;
-        case 2:
-          cursorTrack.getMute().toggle();
-          break;
+      if (data2 === 127) {
+        switch (getChannel(status)) {
+          case 14:
+            transport.play();
+            break;
+          case 13:
+            transport.stop();
+            break;
+          case 8:
+            transport.rewind();
+            break;
+          case 10:
+            transport.record();
+            break;
+          case 0:
+            cursorTrack.getArm().toggle();
+            break;
+          case 1:
+            cursorTrack.getSolo().toggle();
+            break;
+          case 2:
+            cursorTrack.getMute().toggle();
+            break;
+        }
       }
     }
   },
