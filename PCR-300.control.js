@@ -42,8 +42,8 @@ var controlMap = {
     "match": function(channel, data1) {
       var channels = [14, 13, 8, 10, 0, 1, 2];
       if (data1 === 82) {
-        for (ch in channels) {
-          if (channel === ch) {
+        for (idx in channels) {
+          if (channel === channels[idx]) {
             return true;
           }
         }
