@@ -51,7 +51,7 @@ var controlMap = {
       return false;
     },
     "action": function(status, data1, data2) {
-      switch(getChannel(status)) {
+      switch (getChannel(status)) {
         case 14:
           transport.play();
           break;
@@ -127,7 +127,7 @@ var controlMap = {
     },
     "action": function(status, data1, data2) {
       if (data2 === 127) {
-        cursorClip.toggleStep(getChannel(status) + 8*(data1 - 80), seqRoot, 100);
+        cursorClip.toggleStep(getChannel(status) + 8 * (data1 - 80), seqRoot, 100);
       }
     }
   }
