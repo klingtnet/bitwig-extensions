@@ -40,7 +40,7 @@ function init() {
 var controlMap = {
   "transport": {
     "match": function(channel, data1) {
-      var channels = [14, 13, 8, 10];
+      var channels = [14, 13, 8, 10, 0, 1, 2];
       if (data1 === 82) {
         for (ch in channels) {
           if (channel === ch) {
@@ -64,36 +64,15 @@ var controlMap = {
         case 10:
           transport.record();
           break;
-      }
-    }
-  },
-  "arm": {
-    "match": function(channel, data1) {
-      return channel === 0 && data1 === 82;
-    },
-    "func": function(status, data1, data2) {
-      if (data2 === 127) {
-        cursorTrack.getArm().toggle();
-      }
-    }
-  },
-  "solo": {
-    "match": function(channel, data1) {
-      return channel === 1 && data1 === 82;
-    },
-    "func": function(status, data1, data2) {
-      if (data2 === 127) {
-        cursorTrack.getSolo().toggle();
-      }
-    }
-  },
-  "mute": {
-    "match": function(channel, data1) {
-      return channel === 2 && data1 === 82;
-    },
-    "func": function(status, data1, data2) {
-      if (data2 === 127) {
-        cursorTrack.getMute().toggle();
+        case 0:
+          cursorTrack.getArm().toggle();
+          break;
+        case 1:
+          cursorTrack.getSolo().toggle();
+          break;
+        case 2:
+          cursorTrack.getMute().toggle();
+          break;
       }
     }
   },
