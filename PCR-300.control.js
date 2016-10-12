@@ -78,7 +78,7 @@ var controlMap = {
   },
   "masterFader": {
     "match": function(channel, data1) {
-      return channel === 1 && data1 == 18;
+      return channel === 1 && data1 === 18;
     },
     "action": function(status, data1, data2) {
       masterTrack.getVolume().set(data2, MIDI_RES);
@@ -108,11 +108,11 @@ var controlMap = {
   },
   "clipScroll": {
     "match": function(channel, data1) {
-      return channel < 2 && data1 == 83;
+      return channel < 2 && data1 === 83;
     },
     "action": function(status, data1, data2) {
       if (data2 === 127) {
-        if (getChannel(status) == 0) {
+        if (getChannel(status) === 0) {
           seqRoot++;
         } else {
           seqRoot--;
@@ -123,7 +123,7 @@ var controlMap = {
   },
   "clipPattern": {
     "match": function(channel, data1) {
-      return channel < 8 && (data1 == 80 || data1 == 81);
+      return channel < 8 && (data1 === 80 || data1 === 81);
     },
     "action": function(status, data1, data2) {
       if (data2 === 127) {
