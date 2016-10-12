@@ -119,7 +119,6 @@ var controlMap = {
         } else {
           seqRoot--;
         }
-        println(seqRoot);
       }
     }
   },
