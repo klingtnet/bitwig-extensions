@@ -38,43 +38,32 @@ function init() {
 }
 
 var controlMap = {
-  "play": {
+  "transport": {
     "match": function(channel, data1) {
-      return channel === 14 && data1 == 82;
-    },
-    "func": function(status, data1, data2) {
-      if (data2 === 127) {
-        transport.play();
+      var channels = [14, 13, 8, 10];
+      if (data1 === 82) {
+        for (ch in channels) {
+          if (channel === ch) {
+            return true;
+          }
+        }
       }
-    }
-  },
-  "stop": {
-    "match": function(channel, data1) {
-      return channel === 13 && data1 == 82;
+      return false;
     },
     "func": function(status, data1, data2) {
-      if (data2 === 127) {
-        transport.stop();
-      }
-    }
-  },
-  "rewind": {
-    "match": function(channel, data1) {
-      return channel === 8 && data1 == 82;
-    },
-    "func": function(status, data1, data2) {
-      if (data2 === 127) {
-        transport.rewind();
-      }
-    }
-  },
-  "record": {
-    "match": function(channel, data1) {
-      return channel === 10 && data1 == 82;
-    },
-    "func": function(status, data1, data2) {
-      if (data2 === 127) {
-        transport.record();
+      switch(getChannel(status)) {
+        case 14:
+          transport.play();
+          break;
+        case 13:
+          transport.stop();
+          break;
+        case 8:
+          transport.rewind();
+          break;
+        case 10:
+          transport.record();
+          break;
       }
     }
   },
