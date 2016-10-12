@@ -50,7 +50,7 @@ var controlMap = {
       }
       return false;
     },
-    "func": function(status, data1, data2) {
+    "action": function(status, data1, data2) {
       switch(getChannel(status)) {
         case 14:
           transport.play();
@@ -80,7 +80,7 @@ var controlMap = {
     "match": function(channel, data1) {
       return channel === 1 && data1 == 18;
     },
-    "func": function(status, data1, data2) {
+    "action": function(status, data1, data2) {
       masterTrack.getVolume().set(data2, MIDI_RES);
     }
   },
@@ -88,7 +88,7 @@ var controlMap = {
     "match": function(channel, data1) {
       return channel < 8 && data1 === 16;
     },
-    "func": function(status, data1, data2) {
+    "action": function(status, data1, data2) {
       var macro = cursorDevice.getMacro(getChannel(status));
       if (macro != null) {
         macro.getAmount().set(data2, MIDI_RES);
@@ -99,7 +99,7 @@ var controlMap = {
     "match": function(channel, data1) {
       return channel < 8 && data1 === 17;
     },
-    "func": function(status, data1, data2) {
+    "action": function(status, data1, data2) {
       var track = trackBank.getTrack(getChannel(status));
       if (track != null) {
         track.getVolume().set(data2, MIDI_RES);
@@ -110,7 +110,7 @@ var controlMap = {
     "match": function(channel, data1) {
       return channel < 2 && data1 == 83;
     },
-    "func": function(status, data1, data2) {
+    "action": function(status, data1, data2) {
       if (data2 === 127) {
         if (getChannel(status) == 0) {
           seqRoot++;
@@ -125,7 +125,7 @@ var controlMap = {
     "match": function(channel, data1) {
       return channel < 8 && (data1 == 80 || data1 == 81);
     },
-    "func": function(status, data1, data2) {
+    "action": function(status, data1, data2) {
       if (data2 === 127) {
         cursorClip.toggleStep(getChannel(status) + 8*(data1 - 80), seqRoot, 100);
       }
@@ -137,9 +137,9 @@ function midiInPCR2(status, data1, data2) {
   if (isChannelController(status)) {
     for (var key in controlMap) {
       match = controlMap[key].match;
-      func = controlMap[key].func;
+      action = controlMap[key].action;
       if (match(getChannel(status), data1)) {
-        func(status, data1, data2);
+        action(status, data1, data2);
       }
     }
   }
