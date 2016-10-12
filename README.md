@@ -2,6 +2,10 @@
 
 The controller script was only tested with the [PCR-300](http://www.rolandus.com/products/pcr-300/) but should work with the larger models (`PCR-{500,800}`), as well. The controller script assumes that you're using **controller map 0**. Check the [tips](#tips) section or refer to the user's manual on how to change the control map.
 
+## Mapping
+
+![PCR-300 controller mapping](pcr-300-mapping.jpg)
+
 ## Tips
 
 - Switch to controller map `x`:
