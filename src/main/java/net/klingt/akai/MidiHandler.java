@@ -4,6 +4,7 @@ import com.bitwig.extension.api.util.midi.ShortMidiMessage;
 import com.bitwig.extension.callback.ShortMidiDataReceivedCallback;
 import com.bitwig.extension.controller.api.*;
 
+import static com.bitwig.extension.api.util.midi.ShortMidiMessage.NOTE_ON;
 import static net.klingt.akai.MidiMix.*;
 
 public class MidiHandler implements ShortMidiDataReceivedCallback {
@@ -27,6 +28,9 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
             channel.getSolo().addValueObserver(new SoloObserver(midiOut, i));
             channel.getArm().addValueObserver(new ArmObserver(midiOut, i));
         }
+
+        trackBank.canScrollBackwards().addValueObserver(s -> midiOut.sendMidi(NOTE_ON, BANK_LEFT, s ? 1 : 0));
+        trackBank.canScrollForwards().addValueObserver(s -> midiOut.sendMidi(NOTE_ON, BANK_RIGHT, s ? 1 : 0));
     }
 
     @Override
@@ -48,8 +52,14 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
                 soloMode = msg.isNoteOn();
                 break;
             case BANK_LEFT:
+                if (msg.isNoteOn()) {
+                    trackBank.scrollPageBackwards();
+                }
                 break;
             case BANK_RIGHT:
+                if (msg.isNoteOn()) {
+                    trackBank.scrollPageForwards();
+                }
         }
 
         // only handle rising edge
