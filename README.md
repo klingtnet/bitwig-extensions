@@ -14,5 +14,5 @@ Installing from source requires mvn and a Java 8 JDK.
 
 ```sh
 $ mvn install
-$ cp target/midimix.bwextension ~/Bitwig\ Studio/Extensions
+$ cp target/Midimix.bwextension ~/Bitwig\ Studio/Extensions
 ```
