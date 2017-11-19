@@ -1,6 +1,6 @@
 # Bitwig Controller Script for AKAI Midimix
 
-[![Build Status](https://travis-ci.org/klingtnet/bitwig-akai-apc-mini.svg?branch=master)](https://travis-ci.org/klingtnet/bitwig-akai-apc-mini)
+[![Build Status](https://travis-ci.org/klingtnet/bitwig-akai-midimix.svg?branch=master)](https://travis-ci.org/klingtnet/bitwig-akai-midimix)
 
 This is a work in progress.
 
