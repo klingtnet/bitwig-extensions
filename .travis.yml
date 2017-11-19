@@ -2,6 +2,8 @@ language: java
 env:
   - MAVEN_OPTS=-Dorg.slf4j.simpleLogger.defaultLogLevel=warn
 script: mvn test --batch-mode
+jdk:
+  - openjdk8
 deploy:
   provider: releases
   api_key:
