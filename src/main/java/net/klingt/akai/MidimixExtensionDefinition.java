@@ -65,7 +65,10 @@ public class MidimixExtensionDefinition extends ControllerExtensionDefinition {
         switch (platformType) {
             case MAC:
             case WINDOWS:
+                portList.add(new String[]{"MIDI Mix"}, new String[]{"MIDI Mix"});
+
                 System.err.println(format("Support for platform '%s' is experimental.", platformType.name()));
+                break;
             case LINUX:
                 portList.add(new String[]{"MIDI Mix MIDI 1"}, new String[]{"MIDI Mix MIDI 1"});
         }
