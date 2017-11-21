@@ -19,26 +19,12 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
     private final Map<Integer, EventHandler> ccHandlers;
     private boolean soloMode;
 
-    public MidiHandler(Transport transport, MasterTrack masterTrack, TrackBank trackBank, MidiOut midiOut) {
+    MidiHandler(Transport transport, MasterTrack masterTrack, TrackBank trackBank, MidiOut midiOut) {
         this.transport = transport;
         this.masterTrack = masterTrack;
         this.trackBank = trackBank;
         this.noteHandlers = registerNoteHandlers();
         this.ccHandlers = registerCCHandlers();
-
-        // TODO: Move this into MidiExtension's init function
-        for (int i = 0; i < trackBank.getSizeOfBank(); i++) {
-            Track channel = trackBank.getChannel(i);
-            if (channel == null) {
-                continue;
-            }
-            channel.getMute().addValueObserver(new MuteObserver(midiOut, i));
-            channel.getSolo().addValueObserver(new SoloObserver(midiOut, i));
-            channel.getArm().addValueObserver(new ArmObserver(midiOut, i));
-        }
-
-        trackBank.canScrollBackwards().addValueObserver(s -> midiOut.sendMidi(NOTE_ON, BANK_LEFT, s ? 1 : 0));
-        trackBank.canScrollForwards().addValueObserver(s -> midiOut.sendMidi(NOTE_ON, BANK_RIGHT, s ? 1 : 0));
     }
 
     private Map<Integer, EventHandler> registerCCHandlers() {
