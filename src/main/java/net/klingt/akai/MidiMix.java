@@ -5,6 +5,7 @@ import java.util.stream.IntStream;
 
 public class MidiMix {
     static final int[] KNOBS = new int[]{16, 17, 18, 20, 21, 22, 24, 25, 26, 28, 29, 30, 46, 47, 48, 50, 51, 52, 54, 55, 56, 58, 59, 60};
+    static final int[] KNOBS_TOP_ROW = new int[]{16, 20, 24, 28, 46, 50, 54, 58};
     static final int[] FADERS = new int[]{19, 23, 27, 31, 49, 53, 57, 61};
     static final int MASTER_FADER = 62;
     static final int[] MUTE = new int[]{1, 4, 7, 10, 13, 16, 19, 22};

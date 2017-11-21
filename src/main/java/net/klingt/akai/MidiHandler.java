@@ -51,7 +51,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
             return;
         }
 
-        indexOf(msg.getData1(), KNOBS)
+        indexOf(msg.getData1(), KNOBS_TOP_ROW)
                 .filter(i -> i < cursorRemoteControlsPage.getParameterCount())
                 .map(cursorRemoteControlsPage::getParameter)
                 .ifPresent(param -> param.set(msg.getData2(), MIDI_RESOLUTION));
