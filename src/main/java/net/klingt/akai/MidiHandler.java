@@ -82,6 +82,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
         Map<Integer, EventHandler> noteHandlers = new HashMap<>();
         noteHandlers.put(SOLO_MODE, this::handleSoloMode);
         noteHandlers.put(BANK_LEFT, this::handleBankLeftRight);
+        noteHandlers.put(BANK_RIGHT, this::handleBankLeftRight);
         for (int key : REC_ARM) {
             noteHandlers.put(key, this::handleArm);
         }
