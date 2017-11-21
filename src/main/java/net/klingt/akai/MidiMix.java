@@ -19,6 +19,10 @@ public class MidiMix {
         return IntStream.of(array).anyMatch(x -> x == y);
     }
 
+    static boolean isNotIn(int y, int[] array) {
+        return !isIn(y, array);
+    }
+
     static Optional<Integer> indexOf(int cc, int[] arr) {
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] == cc) {
