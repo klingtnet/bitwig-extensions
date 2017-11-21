@@ -8,7 +8,6 @@ import com.bitwig.extension.controller.api.TrackBank;
 
 import java.util.stream.IntStream;
 
-import static com.bitwig.extension.api.util.midi.ShortMidiMessage.NOTE_ON;
 import static net.klingt.akai.MidiMix.*;
 
 public class MidimixExtension extends ControllerExtension {
@@ -45,14 +44,14 @@ public class MidimixExtension extends ControllerExtension {
                 .filter(i -> trackBank.getChannel(i) != null)
                 .forEach(i -> registerChannelObservers(trackBank.getChannel(i), i));
 
-        trackBank.canScrollBackwards().addValueObserver(value -> lightButton(value, BANK_LEFT));
-        trackBank.canScrollForwards().addValueObserver(value -> lightButton(value, BANK_RIGHT));
+        trackBank.canScrollBackwards().addValueObserver(new ButtonObserver(BANK_LEFT, midiOut));
+        trackBank.canScrollForwards().addValueObserver(new ButtonObserver(BANK_RIGHT, midiOut));
     }
 
     private void registerChannelObservers(Track channel, int index) {
-        indexOf(index, MUTE).ifPresent(buttonIndex -> channel.getMute().addValueObserver(value -> lightButton(value, buttonIndex)));
-        indexOf(index, SOLO).ifPresent(buttonIndex -> channel.getSolo().addValueObserver(value -> lightButton(value, buttonIndex)));
-        indexOf(index, REC_ARM).ifPresent(buttonIndex -> channel.getArm().addValueObserver(value -> lightButton(value, buttonIndex)));
+        indexOf(index, MUTE).ifPresent(buttonIndex -> channel.getMute().addValueObserver(new ButtonObserver(buttonIndex, midiOut)));
+        indexOf(index, SOLO).ifPresent(buttonIndex -> channel.getSolo().addValueObserver(new ButtonObserver(buttonIndex, midiOut)));
+        indexOf(index, REC_ARM).ifPresent(buttonIndex -> channel.getArm().addValueObserver(new ButtonObserver(buttonIndex, midiOut)));
     }
 
     @Override
@@ -62,9 +61,5 @@ public class MidimixExtension extends ControllerExtension {
 
     @Override
     public void flush() {
-    }
-
-    private void lightButton(Boolean value, int buttonNote) {
-        midiOut.sendMidi(NOTE_ON, buttonNote, value.compareTo(false));
     }
 }
