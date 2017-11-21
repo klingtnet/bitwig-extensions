@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/klingtnet/bitwig-akai-midimix.svg?branch=master)](https://travis-ci.org/klingtnet/bitwig-akai-midimix)
 
-How it is mapped:
+How the controller is mapped:
 
 - faders control track volume
 - right most fader controls the master track volume
@@ -12,9 +12,18 @@ How it is mapped:
 
 ## Installation
 
+The recommend installation method is to download a precompiled release from [this projects release page](https://github.com/klingtnet/bitwig-akai-midimix/releases) into your `~/Bitwig Studio/Extensions` folder.
+Note that the `Extensions` path is probably different for Windows or Mac.
+
+### From Source (Development)
+
 Installing from source requires mvn and a Java 8 JDK.
 
 ```sh
 $ mvn install
-$ cp target/Midimix.bwextension ~/Bitwig\ Studio/Extensions
+```
+
+I would recommend to symlink the extension like this:
+
+$ ln -s "$PWD/target/Midimix.bwextension" ~/Bitwig\ Studio/Extensions
 ```
