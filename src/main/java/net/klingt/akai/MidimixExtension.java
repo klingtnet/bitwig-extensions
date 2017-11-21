@@ -49,9 +49,9 @@ public class MidimixExtension extends ControllerExtension {
     }
 
     private void registerChannelObservers(Track channel, int index) {
-        indexOf(index, MUTE).ifPresent(buttonIndex -> channel.getMute().addValueObserver(new ButtonObserver(buttonIndex, midiOut)));
-        indexOf(index, SOLO).ifPresent(buttonIndex -> channel.getSolo().addValueObserver(new ButtonObserver(buttonIndex, midiOut)));
-        indexOf(index, REC_ARM).ifPresent(buttonIndex -> channel.getArm().addValueObserver(new ButtonObserver(buttonIndex, midiOut)));
+        valueOfIndex(index, MUTE).ifPresent(buttonNote -> channel.getMute().addValueObserver(new ButtonObserver(buttonNote, midiOut)));
+        valueOfIndex(index, SOLO).ifPresent(buttonNote -> channel.getSolo().addValueObserver(new ButtonObserver(buttonNote, midiOut)));
+        valueOfIndex(index, REC_ARM).ifPresent(buttonNote -> channel.getArm().addValueObserver(new ButtonObserver(buttonNote, midiOut)));
     }
 
     @Override

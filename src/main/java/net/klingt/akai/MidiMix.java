@@ -31,4 +31,11 @@ public class MidiMix {
         }
         return Optional.empty();
     }
+
+    static Optional<Integer> valueOfIndex(int index, int[] arr) {
+        if (index < 0 || index >= arr.length) {
+            return Optional.empty();
+        }
+        return Optional.of(arr[index]);
+    }
 }
