@@ -12,3 +12,4 @@ deploy:
   skip_cleanup: true
   on:
     repo: klingtnet/bitwig-akai-midimix
+    tags: true
