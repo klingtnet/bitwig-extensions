@@ -23,9 +23,9 @@ public class MidiMix {
         return !isIn(y, array);
     }
 
-    static Optional<Integer> indexOf(int cc, int[] arr) {
+    static Optional<Integer> indexOf(int value, int[] arr) {
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == cc) {
+            if (arr[i] == value) {
                 return Optional.of(i);
             }
         }
