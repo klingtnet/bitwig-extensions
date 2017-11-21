@@ -4,6 +4,7 @@ import com.bitwig.extension.api.util.midi.ShortMidiMessage;
 import com.bitwig.extension.callback.ShortMidiDataReceivedCallback;
 import com.bitwig.extension.controller.api.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,18 +22,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
         this.transport = transport;
         this.masterTrack = masterTrack;
         this.trackBank = trackBank;
-        this.noteHandlers = new HashMap<>();
-        this.noteHandlers.put(SOLO_MODE, this::handleSoloMode);
-        this.noteHandlers.put(BANK_LEFT, this::handleBankLeftRight);
-        for (int key : REC_ARM) {
-            this.noteHandlers.put(key, this::handleArm);
-        }
-        for (int key : SOLO) {
-            this.noteHandlers.put(key, this::handleSolo);
-        }
-        for (int key : MUTE) {
-            this.noteHandlers.put(key, this::handleMute);
-        }
+        this.noteHandlers = registerNoteHandlers();
 
         // TODO: Move this into MidiExtension's init function
         for (int i = 0; i < trackBank.getSizeOfBank(); i++) {
@@ -49,21 +39,24 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
         trackBank.canScrollForwards().addValueObserver(s -> midiOut.sendMidi(NOTE_ON, BANK_RIGHT, s ? 1 : 0));
     }
 
-    private void handleSoloMode(ShortMidiMessage msg) {
-        soloMode = msg.isNoteOn();
-    }
+    private Map<Integer, NoteHandler> registerNoteHandlers() {
+        if (this.noteHandlers != null) {
+            return Collections.emptyMap();
+        }
 
-    private void handleBankLeftRight(ShortMidiMessage msg) {
-        if (!msg.isNoteOn()) {
-            return;
+        Map<Integer, NoteHandler> noteHandlers = new HashMap<>();
+        noteHandlers.put(SOLO_MODE, this::handleSoloMode);
+        noteHandlers.put(BANK_LEFT, this::handleBankLeftRight);
+        for (int key : REC_ARM) {
+            noteHandlers.put(key, this::handleArm);
         }
-        switch (msg.getData1()) {
-            case BANK_LEFT:
-                trackBank.scrollPageBackwards();
-                return;
-            case BANK_RIGHT:
-                trackBank.scrollPageForwards();
+        for (int key : SOLO) {
+            noteHandlers.put(key, this::handleSolo);
         }
+        for (int key : MUTE) {
+            noteHandlers.put(key, this::handleMute);
+        }
+        return noteHandlers;
     }
 
     @Override
@@ -73,6 +66,37 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
         handleNote(msg);
     }
 
+    /**
+     * handleCC calls registered handlers, if any, on an incoming MIDI control change.
+     *
+     * @param msg MIDI event
+     */
+    private void handleCC(ShortMidiMessage msg) {
+        if (!msg.isControlChange()) {
+            return;
+        }
+
+        int cc = msg.getData1();
+        int value = msg.getData2();
+
+        if (cc == MASTER_FADER) {
+            masterTrack.getVolume().set(value, MIDI_RESOLUTION);
+        }
+        if (isIn(cc, KNOBS)) {
+        }
+        if (isIn(cc, FADERS)) {
+            indexOf(cc, FADERS)
+                    .filter(i -> i < trackBank.getSizeOfBank())
+                    .map(trackBank::getChannel)
+                    .ifPresent(ch -> ch.getVolume().set(value, MIDI_RESOLUTION));
+        }
+    }
+
+    /**
+     * handleNote calls registered handlers, if any, on an incoming MIDI note event.
+     *
+     * @param msg MIDI event
+     */
     private void handleNote(ShortMidiMessage msg) {
         if (!msg.isNoteOn() && !msg.isNoteOff()) {
             return;
@@ -80,7 +104,26 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
         if (!noteHandlers.containsKey(msg.getData1())) {
             return;
         }
+
         noteHandlers.get(msg.getData1()).handle(msg);
+    }
+
+    private void handleSoloMode(ShortMidiMessage msg) {
+        soloMode = msg.isNoteOn();
+    }
+
+    private void handleBankLeftRight(ShortMidiMessage msg) {
+        if (!msg.isNoteOn()) {
+            return;
+        }
+
+        switch (msg.getData1()) {
+            case BANK_LEFT:
+                trackBank.scrollPageBackwards();
+                return;
+            case BANK_RIGHT:
+                trackBank.scrollPageForwards();
+        }
     }
 
     private void handleSolo(ShortMidiMessage msg) {
@@ -126,27 +169,6 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
 
     private void toggleArm(Track track) {
         track.getArm().toggle();
-    }
-
-    private void handleCC(ShortMidiMessage msg) {
-        if (!msg.isControlChange()) {
-            return;
-        }
-
-        int cc = msg.getData1();
-        int value = msg.getData2();
-
-        if (cc == MASTER_FADER) {
-            masterTrack.getVolume().set(value, MIDI_RESOLUTION);
-        }
-        if (isIn(cc, KNOBS)) {
-        }
-        if (isIn(cc, FADERS)) {
-            indexOf(cc, FADERS)
-                    .filter(i -> i < trackBank.getSizeOfBank())
-                    .map(trackBank::getChannel)
-                    .ifPresent(ch -> ch.getVolume().set(value, MIDI_RESOLUTION));
-        }
     }
 
     void sysexReceived(final String data) {
