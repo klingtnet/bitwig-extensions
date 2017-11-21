@@ -16,6 +16,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
     private final MasterTrack masterTrack;
     private final TrackBank trackBank;
     private final Map<Integer, EventHandler> noteHandlers;
+    private final Map<Integer, EventHandler> ccHandlers;
     private boolean soloMode;
 
     public MidiHandler(Transport transport, MasterTrack masterTrack, TrackBank trackBank, MidiOut midiOut) {
@@ -23,6 +24,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
         this.masterTrack = masterTrack;
         this.trackBank = trackBank;
         this.noteHandlers = registerNoteHandlers();
+        this.ccHandlers = registerCCHandlers();
 
         // TODO: Move this into MidiExtension's init function
         for (int i = 0; i < trackBank.getSizeOfBank(); i++) {
@@ -37,6 +39,39 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
 
         trackBank.canScrollBackwards().addValueObserver(s -> midiOut.sendMidi(NOTE_ON, BANK_LEFT, s ? 1 : 0));
         trackBank.canScrollForwards().addValueObserver(s -> midiOut.sendMidi(NOTE_ON, BANK_RIGHT, s ? 1 : 0));
+    }
+
+    private Map<Integer, EventHandler> registerCCHandlers() {
+        if (this.ccHandlers != null) {
+            return Collections.emptyMap();
+        }
+
+        Map<Integer, EventHandler> ccHandlers = new HashMap<>();
+        ccHandlers.put(MASTER_FADER, this::handleMasterFader);
+        for(int fader : FADERS) {
+            ccHandlers.put(fader, this::handleFader);
+        }
+
+        return ccHandlers;
+    }
+
+    private void handleFader(ShortMidiMessage msg) {
+        if(!msg.isControlChange()) {
+            return;
+        }
+
+        indexOf(msg.getData1(), FADERS)
+                .filter(i -> i < trackBank.getSizeOfBank())
+                .map(trackBank::getChannel)
+                .ifPresent(ch -> ch.getVolume().set(msg.getData2(), MIDI_RESOLUTION));
+    }
+
+    private void handleMasterFader(ShortMidiMessage msg) {
+        if (!msg.isControlChange()) {
+            return;
+        }
+
+        masterTrack.getVolume().set(msg.getData2(), MIDI_RESOLUTION);
     }
 
     private Map<Integer, EventHandler> registerNoteHandlers() {
@@ -75,21 +110,11 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
         if (!msg.isControlChange()) {
             return;
         }
+        if (!ccHandlers.containsKey(msg.getData1())) {
+            return;
+        }
 
-        int cc = msg.getData1();
-        int value = msg.getData2();
-
-        if (cc == MASTER_FADER) {
-            masterTrack.getVolume().set(value, MIDI_RESOLUTION);
-        }
-        if (isIn(cc, KNOBS)) {
-        }
-        if (isIn(cc, FADERS)) {
-            indexOf(cc, FADERS)
-                    .filter(i -> i < trackBank.getSizeOfBank())
-                    .map(trackBank::getChannel)
-                    .ifPresent(ch -> ch.getVolume().set(value, MIDI_RESOLUTION));
-        }
+        ccHandlers.get(msg.getData1()).handle(msg);
     }
 
     /**
