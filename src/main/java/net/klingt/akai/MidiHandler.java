@@ -15,7 +15,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
     private final Transport transport;
     private final MasterTrack masterTrack;
     private final TrackBank trackBank;
-    private final Map<Integer, NoteHandler> noteHandlers;
+    private final Map<Integer, EventHandler> noteHandlers;
     private boolean soloMode;
 
     public MidiHandler(Transport transport, MasterTrack masterTrack, TrackBank trackBank, MidiOut midiOut) {
@@ -39,12 +39,12 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
         trackBank.canScrollForwards().addValueObserver(s -> midiOut.sendMidi(NOTE_ON, BANK_RIGHT, s ? 1 : 0));
     }
 
-    private Map<Integer, NoteHandler> registerNoteHandlers() {
+    private Map<Integer, EventHandler> registerNoteHandlers() {
         if (this.noteHandlers != null) {
             return Collections.emptyMap();
         }
 
-        Map<Integer, NoteHandler> noteHandlers = new HashMap<>();
+        Map<Integer, EventHandler> noteHandlers = new HashMap<>();
         noteHandlers.put(SOLO_MODE, this::handleSoloMode);
         noteHandlers.put(BANK_LEFT, this::handleBankLeftRight);
         for (int key : REC_ARM) {
@@ -192,7 +192,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
     }
 
     @FunctionalInterface
-    static interface NoteHandler {
+    static interface EventHandler {
         void handle(ShortMidiMessage msg);
     }
 }
