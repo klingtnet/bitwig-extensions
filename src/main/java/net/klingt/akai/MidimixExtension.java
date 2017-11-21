@@ -2,6 +2,7 @@ package net.klingt.akai;
 
 import com.bitwig.extension.controller.ControllerExtension;
 import com.bitwig.extension.controller.api.ControllerHost;
+import com.bitwig.extension.controller.api.CursorRemoteControlsPage;
 import com.bitwig.extension.controller.api.MidiOut;
 import com.bitwig.extension.controller.api.Track;
 import com.bitwig.extension.controller.api.TrackBank;
@@ -25,11 +26,12 @@ public class MidimixExtension extends ControllerExtension {
         TrackBank trackBank = host.getProject()
                 .getShownTopLevelTrackGroup()
                 .createTrackBank(8, 0, 0, false);
+        CursorRemoteControlsPage cursorRemoteControlsPage = host.createCursorTrack(0, 0).createCursorDevice().createCursorRemoteControlsPage(8);
 
         MidiHandler midiHandler = new MidiHandler(host.createTransport(),
                 host.createMasterTrack(0),
                 trackBank,
-                midiOut
+                cursorRemoteControlsPage
         );
         host.getMidiInPort(0).setMidiCallback(midiHandler);
         host.getMidiInPort(0).setSysexCallback(midiHandler::sysexReceived);

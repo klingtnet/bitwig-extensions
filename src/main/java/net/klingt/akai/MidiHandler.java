@@ -17,14 +17,16 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
     private final TrackBank trackBank;
     private final Map<Integer, EventHandler> noteHandlers;
     private final Map<Integer, EventHandler> ccHandlers;
+    private final CursorRemoteControlsPage cursorRemoteControlsPage;
     private boolean soloMode;
 
-    MidiHandler(Transport transport, MasterTrack masterTrack, TrackBank trackBank, MidiOut midiOut) {
+    MidiHandler(Transport transport, MasterTrack masterTrack, TrackBank trackBank, CursorRemoteControlsPage cursorRemoteControlsPage) {
         this.transport = transport;
         this.masterTrack = masterTrack;
         this.trackBank = trackBank;
         this.noteHandlers = registerNoteHandlers();
         this.ccHandlers = registerCCHandlers();
+        this.cursorRemoteControlsPage = cursorRemoteControlsPage;
     }
 
     private Map<Integer, EventHandler> registerCCHandlers() {
@@ -37,8 +39,22 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
         for(int fader : FADERS) {
             ccHandlers.put(fader, this::handleFader);
         }
+        for(int knob : KNOBS) {
+            ccHandlers.put(knob, this::handleKnob);
+        }
 
         return ccHandlers;
+    }
+
+    private void handleKnob(ShortMidiMessage msg) {
+        if(!msg.isControlChange()) {
+            return;
+        }
+
+        indexOf(msg.getData1(), KNOBS)
+                .filter(i -> i < cursorRemoteControlsPage.getParameterCount())
+                .map(cursorRemoteControlsPage::getParameter)
+                .ifPresent(param -> param.set(msg.getData2(), MIDI_RESOLUTION));
     }
 
     private void handleFader(ShortMidiMessage msg) {
