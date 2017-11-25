@@ -26,5 +26,5 @@ $ mvn install
 I would recommend to symlink the extension like this:
 
 ```sh
-$ ln -s "$PWD/target/Midimix.bwextension" ~/Bitwig\ Studio/Extensions
+$ ln -s "$PWD/target/AKAIMidimix.bwextension" ~/Bitwig\ Studio/Extensions
 ```
