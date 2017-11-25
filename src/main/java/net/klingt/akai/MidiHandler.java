@@ -4,12 +4,12 @@ import com.bitwig.extension.api.util.midi.ShortMidiMessage;
 import com.bitwig.extension.callback.ShortMidiDataReceivedCallback;
 import com.bitwig.extension.controller.api.*;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static com.bitwig.extension.api.util.midi.ShortMidiMessage.NOTE_ON;
 import static net.klingt.akai.MidiMix.*;
 
 public class MidiHandler implements ShortMidiDataReceivedCallback {
@@ -37,13 +37,8 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
 
         Map<Integer, Consumer<ShortMidiMessage>> ccHandlers = new HashMap<>();
         ccHandlers.put(MASTER_FADER, this::handleMasterFader);
-        for(int fader : FADERS) {
-            ccHandlers.put(fader, this::handleFader);
-        }
-        for(int knob : KNOBS) {
-            ccHandlers.put(knob, this::handleKnob);
-        }
-
+        Arrays.stream(FADERS).forEach(key -> ccHandlers.put(key, this::handleFader));
+        Arrays.stream(KNOBS).forEach(key -> ccHandlers.put(key, this::handleKnob));
         return ccHandlers;
     }
 
@@ -86,15 +81,9 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
         noteHandlers.put(SOLO_MODE, this::handleSoloMode);
         noteHandlers.put(BANK_LEFT, this::handleBankLeftRight);
         noteHandlers.put(BANK_RIGHT, this::handleBankLeftRight);
-        for (int key : REC_ARM) {
-            noteHandlers.put(key, this::handleArm);
-        }
-        for (int key : SOLO) {
-            noteHandlers.put(key, this::handleSolo);
-        }
-        for (int key : MUTE) {
-            noteHandlers.put(key, this::handleMute);
-        }
+        Arrays.stream(REC_ARM).forEach(key -> noteHandlers.put(key, this::handleArm));
+        Arrays.stream(SOLO).forEach(key -> noteHandlers.put(key, this::handleSolo));
+        Arrays.stream(MUTE).forEach(key -> noteHandlers.put(key, this::handleMute));
         return noteHandlers;
     }
 
