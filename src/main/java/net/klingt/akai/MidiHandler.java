@@ -7,6 +7,7 @@ import com.bitwig.extension.controller.api.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static com.bitwig.extension.api.util.midi.ShortMidiMessage.NOTE_ON;
 import static net.klingt.akai.MidiMix.*;
@@ -15,8 +16,8 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
     private final Transport transport;
     private final MasterTrack masterTrack;
     private final TrackBank trackBank;
-    private final Map<Integer, EventHandler> noteHandlers;
-    private final Map<Integer, EventHandler> ccHandlers;
+    private final Map<Integer, Consumer<ShortMidiMessage>> noteHandlers;
+    private final Map<Integer, Consumer<ShortMidiMessage>> ccHandlers;
     private final CursorRemoteControlsPage cursorRemoteControlsPage;
     private boolean soloMode;
 
@@ -29,12 +30,12 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
         this.cursorRemoteControlsPage = cursorRemoteControlsPage;
     }
 
-    private Map<Integer, EventHandler> registerCCHandlers() {
+    private Map<Integer, Consumer<ShortMidiMessage>> registerCCHandlers() {
         if (this.ccHandlers != null) {
             return Collections.emptyMap();
         }
 
-        Map<Integer, EventHandler> ccHandlers = new HashMap<>();
+        Map<Integer, Consumer<ShortMidiMessage>> ccHandlers = new HashMap<>();
         ccHandlers.put(MASTER_FADER, this::handleMasterFader);
         for(int fader : FADERS) {
             ccHandlers.put(fader, this::handleFader);
@@ -76,12 +77,12 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
         masterTrack.getVolume().set(msg.getData2(), MIDI_RESOLUTION);
     }
 
-    private Map<Integer, EventHandler> registerNoteHandlers() {
+    private Map<Integer, Consumer<ShortMidiMessage>> registerNoteHandlers() {
         if (this.noteHandlers != null) {
             return Collections.emptyMap();
         }
 
-        Map<Integer, EventHandler> noteHandlers = new HashMap<>();
+        Map<Integer, Consumer<ShortMidiMessage>> noteHandlers = new HashMap<>();
         noteHandlers.put(SOLO_MODE, this::handleSoloMode);
         noteHandlers.put(BANK_LEFT, this::handleBankLeftRight);
         noteHandlers.put(BANK_RIGHT, this::handleBankLeftRight);
@@ -117,7 +118,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
             return;
         }
 
-        ccHandlers.get(msg.getData1()).handle(msg);
+        ccHandlers.get(msg.getData1()).accept(msg);
     }
 
     /**
@@ -133,7 +134,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
             return;
         }
 
-        noteHandlers.get(msg.getData1()).handle(msg);
+        noteHandlers.get(msg.getData1()).accept(msg);
     }
 
     private void handleSoloMode(ShortMidiMessage msg) {
@@ -217,10 +218,5 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
             case "f07f7f0606f7":
                 transport.record();
         }
-    }
-
-    @FunctionalInterface
-    static interface EventHandler {
-        void handle(ShortMidiMessage msg);
     }
 }
