@@ -43,7 +43,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
     }
 
     private void handleKnob(ShortMidiMessage msg) {
-        if(!msg.isControlChange()) {
+        if (!msg.isControlChange()) {
             return;
         }
 
@@ -54,7 +54,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
     }
 
     private void handleFader(ShortMidiMessage msg) {
-        if(!msg.isControlChange()) {
+        if (!msg.isControlChange()) {
             return;
         }
 
