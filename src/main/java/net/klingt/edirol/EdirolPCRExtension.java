@@ -23,8 +23,7 @@ public class EdirolPCRExtension extends ControllerExtension {
         final ControllerHost host = getHost();
 
         this.midiOut = host.getMidiOutPort(MidiOutPorts.ONE.getValue());
-        MidiHandler midiHandler = new MidiHandler(midiOut
-                , host.createTransport()
+        MidiHandler midiHandler = new MidiHandler(host.createTransport()
                 , host.createMasterTrack(0)
                 , host.createCursorTrack(0, 0)
                 , host.createTrackBank(8, 0, 0)

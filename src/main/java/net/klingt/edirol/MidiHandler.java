@@ -1,12 +1,10 @@
 package net.klingt.edirol;
 
 import com.bitwig.extension.api.util.midi.ShortMidiMessage;
-import com.bitwig.extension.controller.api.BrowserResultsItem;
 import com.bitwig.extension.controller.api.CursorRemoteControlsPage;
 import com.bitwig.extension.controller.api.CursorTrack;
 import com.bitwig.extension.controller.api.DrumPadBank;
 import com.bitwig.extension.controller.api.MasterTrack;
-import com.bitwig.extension.controller.api.MidiOut;
 import com.bitwig.extension.controller.api.PinnableCursorDevice;
 import com.bitwig.extension.controller.api.PopupBrowser;
 import com.bitwig.extension.controller.api.RemoteControl;
@@ -31,7 +29,7 @@ public class MidiHandler {
     private final CursorTrack cursorTrack;
     private int prevProgramChange = 0;
 
-    public MidiHandler(MidiOut midiOut, Transport transport, MasterTrack masterTrack, CursorTrack cursorTrack, TrackBank trackBank, PopupBrowser popupBrowser) {
+    public MidiHandler(Transport transport, MasterTrack masterTrack, CursorTrack cursorTrack, TrackBank trackBank, PopupBrowser popupBrowser) {
         this.transport = transport;
         this.masterTrack = masterTrack;
         this.trackBank = trackBank;
@@ -132,7 +130,7 @@ public class MidiHandler {
         popupBrowser.selectNextFile();
     }
 
-    private void unhandler(ShortMidiMessage shortMidiMessage) {
+    private void unhandler(ShortMidiMessage msg) {
     }
 
     public void midiReceivedOnPortOne(int statusByte, int data1, int data2) {
@@ -154,7 +152,6 @@ public class MidiHandler {
         }
 
         cursorDevice.browseToReplaceDevice();
-//        ((CursorBrowserResultItem) resultItem).selectNext();
         int delta = msg.getData1() - prevProgramChange;
         if (delta < 0) {
             popupBrowser.selectPreviousFile();
