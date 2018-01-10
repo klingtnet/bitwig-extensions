@@ -1,5 +1,7 @@
 # Bitwig Controller Script for the [Edirol PCR](http://www.rolandus.com/products/pcr-300/) USB Midi controller family
 
+[![Build Status](https://travis-ci.org/klingtnet/bitwig-edirol-pcr.svg?branch=master)](https://travis-ci.org/klingtnet/bitwig-edirol-pcr)
+
 The controller script was only tested with the [PCR-300](http://www.rolandus.com/products/pcr-300/) but should work with the larger models (`PCR-{500,800}`), as well. The controller script assumes that you're using **controller map 0**. Check the [tips](#tips) section or refer to the user's manual on how to change the control map.
 
 ## Tips
