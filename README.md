@@ -1,10 +1,12 @@
 # Bitwig Controller Script for the [Edirol PCR](http://www.rolandus.com/products/pcr-300/) USB Midi controller family
 
+[![Build Status](https://travis-ci.org/klingtnet/bitwig-edirol-pcr.svg?branch=master)](https://travis-ci.org/klingtnet/bitwig-edirol-pcr)
+
 The controller script was only tested with the [PCR-300](http://www.rolandus.com/products/pcr-300/) but should work with the larger models (`PCR-{500,800}`), as well. The controller script assumes that you're using **controller map 0**. Check the [tips](#tips) section or refer to the user's manual on how to change the control map.
 
-## Mapping
+## Notes
 
-![PCR-300 controller mapping](pcr-300-mapping.jpg)
+- the 9th knob is not mapped. If someone has a good idea on where to map it then please let me know!
 
 ## Tips
 
@@ -29,8 +31,4 @@ The controller script was only tested with the [PCR-300](http://www.rolandus.com
 ## Links
 
 - [Owner's Manual](http://lib.roland.co.jp/support/en/manuals/res/1810983/PCR-300_500_800_e2.pdf)
-
-## Improvements
-
-- Check if pad indicator leds can be set via MIDI to indicate notes set in the clip (sequence). Currently, it looks like this is not possible and the leds are always on for a pad if it transmit note events and off if it sends control change messages.
 
