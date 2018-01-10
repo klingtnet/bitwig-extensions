@@ -28,15 +28,18 @@ public class MidiHandler {
     private final PinnableCursorDevice cursorDevice;
     private final PopupBrowser popupBrowser;
     private final DrumPadBank cursorDeviceDrumPads;
+    private final CursorTrack cursorTrack;
     private int prevProgramChange = 0;
 
     public MidiHandler(MidiOut midiOut, Transport transport, MasterTrack masterTrack, CursorTrack cursorTrack, TrackBank trackBank, PopupBrowser popupBrowser) {
         this.transport = transport;
         this.masterTrack = masterTrack;
         this.trackBank = trackBank;
+        this.cursorTrack = cursorTrack;
         this.cursorDevice = cursorTrack.createCursorDevice();
         cursorDevice.hasDrumPads().markInterested();
         this.cursorDeviceDrumPads = cursorDevice.createDrumPadBank(16);
+        this.cursorDeviceDrumPads.scrollPosition().markInterested();
         this.cursorRemoteControlsPage = cursorDevice.createCursorRemoteControlsPage(8);
         this.popupBrowser = popupBrowser;
         popupBrowser.exists().markInterested();
@@ -64,21 +67,37 @@ public class MidiHandler {
         this.handlers.put(HandlerID.of(2, 82), this::selectNextPreset);
 
         // pads a1-a9
-        IntStream.rangeClosed(0,7).forEach(ch -> this.handlers.put(HandlerID.of(ch, 80), this::padHandler));
-        this.handlers.put(HandlerID.of(0, 83), this::unhandler);
+        IntStream.rangeClosed(0, 7).forEach(ch -> this.handlers.put(HandlerID.of(ch, 80), this::padHandler));
+        this.handlers.put(HandlerID.of(0, 83), this::scrollPadsUp);
         // pads b1-b9
-        IntStream.rangeClosed(0,7).forEach(ch -> this.handlers.put(HandlerID.of(ch, 81), this::padHandler));
-        this.handlers.put(HandlerID.of(1, 83), this::unhandler);
+        IntStream.rangeClosed(0, 7).forEach(ch -> this.handlers.put(HandlerID.of(ch, 81), this::padHandler));
+        this.handlers.put(HandlerID.of(1, 83), this::scrollPadsDown);
+    }
+
+    private void scrollPadsUp(ShortMidiMessage msg) {
+        if (!cursorDevice.hasDrumPads().get() || isOff(msg)) {
+            return;
+        }
+
+        cursorDeviceDrumPads.scrollBy(4);
+    }
+
+    private void scrollPadsDown(ShortMidiMessage msg) {
+        if (!cursorDevice.hasDrumPads().get() || isOff(msg)) {
+            return;
+        }
+
+        cursorDeviceDrumPads.scrollBy(-4);
     }
 
     private void padHandler(ShortMidiMessage msg) {
-        if (!cursorDevice.hasDrumPads().get()) {
+        if (!cursorDevice.hasDrumPads().get() || isOff(msg)) {
             return;
         }
 
         int offsetPadRowA = (81 - msg.getData1()) * 8;
         int index = msg.getChannel() + offsetPadRowA;
-        cursorDeviceDrumPads.getItemAt(index).isActivated().toggle();
+        cursorTrack.playNote(cursorDeviceDrumPads.scrollPosition().get() + index, msg.getData2());
     }
 
     private boolean isOff(ShortMidiMessage msg) {
