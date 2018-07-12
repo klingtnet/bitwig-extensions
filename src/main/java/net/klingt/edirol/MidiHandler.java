@@ -203,7 +203,7 @@ public class MidiHandler {
     }
 
     private void handleTransport(ShortMidiMessage msg) {
-        if (!msg.isControlChange()) {
+        if (!msg.isControlChange() || isOff(msg)) {
             return;
         }
 
@@ -218,7 +218,7 @@ public class MidiHandler {
                 transport.stop();
                 break;
             case 14:
-                transport.play();
+                transport.togglePlay();
         }
     }
 
