@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
 public class MidiHandler {
     private static final Number MIDI_RESOLUTION = 128;
     private static int KNOB_OFFSET = 20;
+    private static int PAD_OFFSET = 0;
     private final CursorRemoteControlsPage cursorRemoteControlsPage;
     private final Map<HandlerID, Consumer<ShortMidiMessage>> handlers;
     private final PinnableCursorDevice cursorDevice;
@@ -25,7 +26,7 @@ public class MidiHandler {
         this.cursorTrack = cursorTrack;
         this.cursorDevice = cursorTrack.createCursorDevice();
         cursorDevice.hasDrumPads().markInterested();
-        this.cursorDeviceDrumPads = cursorDevice.createDrumPadBank(16);
+        this.cursorDeviceDrumPads = cursorDevice.createDrumPadBank(8);
         this.cursorDeviceDrumPads.scrollPosition().markInterested();
         this.cursorRemoteControlsPage = cursorDevice.createCursorRemoteControlsPage(8);
 
@@ -35,7 +36,7 @@ public class MidiHandler {
 
     private void registerCCHandlers() {
         IntStream.rangeClosed(KNOB_OFFSET, KNOB_OFFSET + 7).forEach(cc -> this.handlers.put(HandlerID.of(0, cc), this::handleKnob));
-        IntStream.rangeClosed(60, 67).forEach(note -> this.handlers.put(HandlerID.of(9, note), this::padHandler));
+        IntStream.rangeClosed(PAD_OFFSET, PAD_OFFSET + 7).forEach(cc -> this.handlers.put(HandlerID.of(9, cc), this::padHandler));
     }
 
     private void padHandler(ShortMidiMessage msg) {
@@ -43,8 +44,7 @@ public class MidiHandler {
             return;
         }
 
-        int offsetPadRowA = (81 - msg.getData1()) * 8;
-        int index = msg.getChannel() + offsetPadRowA;
+        int index = msg.getData1();
         cursorTrack.playNote(cursorDeviceDrumPads.scrollPosition().get() + index, msg.getData2());
     }
 
