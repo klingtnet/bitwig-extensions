@@ -14,6 +14,7 @@ import java.util.stream.IntStream;
 
 public class MidiHandler {
     private static final Number MIDI_RESOLUTION = 128;
+    private static int KNOB_OFFSET = 20;
     private final CursorRemoteControlsPage cursorRemoteControlsPage;
     private final Map<HandlerID, Consumer<ShortMidiMessage>> handlers;
     private final PinnableCursorDevice cursorDevice;
@@ -33,7 +34,7 @@ public class MidiHandler {
     }
 
     private void registerCCHandlers() {
-        IntStream.rangeClosed(20, 27).forEach(cc -> this.handlers.put(HandlerID.of(0, cc), this::handleKnob));
+        IntStream.rangeClosed(KNOB_OFFSET, KNOB_OFFSET + 7).forEach(cc -> this.handlers.put(HandlerID.of(0, cc), this::handleKnob));
         IntStream.rangeClosed(60, 67).forEach(note -> this.handlers.put(HandlerID.of(9, note), this::padHandler));
     }
 
@@ -60,14 +61,22 @@ public class MidiHandler {
     }
 
     private void handleKnob(ShortMidiMessage msg) {
-        if (!msg.isControlChange() || msg.getData1() != 16) {
+        if (!msg.isControlChange()) {
             return;
         }
 
-        RemoteControl parameter = cursorRemoteControlsPage.getParameter(msg.getChannel());
+        int index = msg.getData1() - KNOB_OFFSET;
+        if (!inClosedRange(index, 0, cursorRemoteControlsPage.getParameterCount())) {
+            return;
+        }
+        RemoteControl parameter = cursorRemoteControlsPage.getParameter(index);
         if (parameter == null) {
             return;
         }
         parameter.set(msg.getData2(), MIDI_RESOLUTION);
+    }
+
+    private boolean inClosedRange(int data1, int low, int high) {
+        return data1 >= low && data1 <= high;
     }
 }
