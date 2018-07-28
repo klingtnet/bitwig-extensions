@@ -1,6 +1,15 @@
 language: java
 env:
-- MAVEN_OPTS=-Dorg.slf4j.simpleLogger.defaultLogLevel=warn
+  matrix:
+  - MAVEN_OPTS=-Dorg.slf4j.simpleLogger.defaultLogLevel=warn
+  global:
+    secure: tzpAjiThswEuqgqHIPaFliYWSC8PV3LCmVFbZstbmPCEee4cwZEmpl5wjXH/vVounqjKIGrx8rAuwb8NlmoWZ3FMJukPWI0c7CTgGNQk9vRNIUg68zIUT0+/nnWzTWhfxQdiZmEaHTcISf3K8Zz+uhKWGrj8oEmhEeEt++z7pIzx45XZLxvi60P9euLHbqjv/M7DhOX5jWrBF4nBzWjEc1bC10W6USRsWhM4OHYcdyXA5EQEm4hiPpNvPhJkWKau+TTWqWVoOJ7Aq2buQzkDoHQIead0UlA1QOYI9+Lh0Xnm3az51O1Y6xq73ALB0jm5+tVfIjE8JbqHUFazr3YvtTSP+rgiUgqmMPoSNCwiwvzDwVC6vO7dwhgYoL5doJeXFBDYvrp9l+ldvfBlXSLe2HTRS5l3oRSueQniXB4rnyBB8fco6dX2YmdkX+0nsmhUBu72VmA1Z3v/35kAbpIAoRb7eIOTPuXpeHsdrqgj1zx3glYmAIwx/qmgG9nTMQ4Nv81h0ABULUOoUSVhzDo/SIWnUaYi2CHhVSgo40xh+d+9LLGu77PLqJGKXpYkxl5oucvuSxJ6KGUTuZ/VYazWXe7rIM3rMrLAvZRRa2Z7N3nx7ccXOyJlYH95JRBPq0iAYiQAS1pHik1C/GPVF2SUxjl2M4pKyBC3fS1P5VqUkwk=
 script: mvn test --batch-mode
 jdk:
 - openjdk8
+deploy:
+  provider: releases
+  api_key: <github-token>
+  file: target/AkaiMPKMiniMK2.bwextension.bwextension
+  on:
+    repo: klingtnet/bitwig-akai-mpk-mini-mk2
