@@ -20,7 +20,7 @@ To use the extension the controller must be in `PROG 4` which you can select lik
 
 To use the automapping for pads the controller must be in `CC` mode.
 
-![Top view of AKAI MPK mini mk2](./AKAI-mpk-mini-mk2.jpg)
+![Top view of AKAI MPK mini mk2](./AKAI-MPK-mini-mk2.jpg)
 
 ## Installation
 
