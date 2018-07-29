@@ -1,7 +1,9 @@
 language: java
 env:
 - MAVEN_OPTS=-Dorg.slf4j.simpleLogger.defaultLogLevel=warn
-script: mvn test --batch-mode
+script:
+  - make test
+  - make build
 jdk:
 - openjdk8
 deploy:
