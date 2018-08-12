@@ -2,7 +2,7 @@ language: java
 env:
 - MAVEN_OPTS=-Dorg.slf4j.simpleLogger.defaultLogLevel=warn
 script:
-- make install
+- mvn install
 jdk:
 - openjdk8
 deploy:
