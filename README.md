@@ -6,7 +6,7 @@ This is a collection of my custom controller extensions, previously called scrip
 
 ## Instructions
 
-The installation is super easy, either you use the precompiled extensions from the [github release page][releases] or you build it yourself, give GNU Make, Maven and Java8+ is available:
+The installation is super easy, either you use the precompiled extensions from the [github release page][releases] or you build it yourself, given GNU Make, Maven and Java8+ is available:
 
 ```sh
 $ make install
