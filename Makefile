@@ -5,7 +5,7 @@ JAVA_SOURCES:=$(shell find -type f -name '*.java')
 
 all: build
 
-build: target/AkaiMPKMiniMK2.bwextension
+build: akai-midimix/target/AKAIMidimix.bwextension akai-mpk-mini-mk2/target/AkaiMPKMiniMK2.bwextension edirol-pcr/target/EdirolPCR.bwextension
 
 akai-midimix/target/AKAIMidimix.bwextension: $(JAVA_SOURCES)
 akai-mpk-mini-mk2/target/AkaiMPKMiniMK2.bwextension: $(JAVA_SOURCES)
