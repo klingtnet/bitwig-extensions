@@ -10,11 +10,15 @@ import com.bitwig.extension.controller.api.PopupBrowser;
 import com.bitwig.extension.controller.api.RemoteControl;
 import com.bitwig.extension.controller.api.TrackBank;
 import com.bitwig.extension.controller.api.Transport;
+import com.bitwig.extension.controller.api.UserControlBank;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
+
+import static net.klingt.edirol.EdirolPCRExtension.EXPRESSION_PEDAL_IDX;
+import static net.klingt.edirol.EdirolPCRExtension.HOLD_PEDAL_IDX;
 
 public class MidiHandler {
     private static final Number MIDI_RESOLUTION = 128;
@@ -27,9 +31,10 @@ public class MidiHandler {
     private final PopupBrowser popupBrowser;
     private final DrumPadBank cursorDeviceDrumPads;
     private final CursorTrack cursorTrack;
+    private final UserControlBank pedals;
     private int prevProgramChange = 0;
 
-    public MidiHandler(Transport transport, MasterTrack masterTrack, CursorTrack cursorTrack, TrackBank trackBank, PopupBrowser popupBrowser) {
+    public MidiHandler(Transport transport, MasterTrack masterTrack, CursorTrack cursorTrack, TrackBank trackBank, PopupBrowser popupBrowser, UserControlBank pedals) {
         this.transport = transport;
         this.masterTrack = masterTrack;
         this.trackBank = trackBank;
@@ -41,6 +46,7 @@ public class MidiHandler {
         this.cursorRemoteControlsPage = cursorDevice.createCursorRemoteControlsPage(8);
         this.popupBrowser = popupBrowser;
         popupBrowser.exists().markInterested();
+        this.pedals = pedals;
 
         this.handlers = new HashMap<>();
         registerCCHandlers();
@@ -70,6 +76,18 @@ public class MidiHandler {
         // pads b1-b9
         IntStream.rangeClosed(0, 7).forEach(ch -> this.handlers.put(HandlerID.of(ch, 81), this::padHandler));
         this.handlers.put(HandlerID.of(1, 83), this::scrollPadsDown);
+
+        // pedals
+        this.handlers.put(HandlerID.of(0, 64), this::holdPedal);
+        this.handlers.put(HandlerID.of(0, 11), this::expressionPedal);
+    }
+
+    private void holdPedal(ShortMidiMessage msg) {
+        pedals.getControl(HOLD_PEDAL_IDX).value().set(msg.getData2(), MIDI_RESOLUTION);
+    }
+
+    private void expressionPedal(ShortMidiMessage msg) {
+        pedals.getControl(EXPRESSION_PEDAL_IDX).value().set(msg.getData2(), MIDI_RESOLUTION);
     }
 
     private void scrollPadsUp(ShortMidiMessage msg) {
@@ -135,10 +153,11 @@ public class MidiHandler {
 
     public void midiReceivedOnPortOne(int statusByte, int data1, int data2) {
         ShortMidiMessage msg = new ShortMidiMessage(statusByte, data1, data2);
-        if (!msg.isProgramChange()) {
-            return;
+        if (msg.isProgramChange()) {
+            handleProgramChange(msg);
+        } else if (msg.isControlChange()) {
+            handlers.get(HandlerID.of(msg)).accept(msg);
         }
-        handleProgramChange(msg);
     }
 
     public void midiReceivedOnPortTwo(int statusByte, int data1, int data2) {
