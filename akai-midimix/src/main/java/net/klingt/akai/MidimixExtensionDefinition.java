@@ -1,11 +1,11 @@
 package net.klingt.akai;
 
-import java.util.UUID;
-
 import com.bitwig.extension.api.PlatformType;
 import com.bitwig.extension.controller.AutoDetectionMidiPortNamesList;
 import com.bitwig.extension.controller.ControllerExtensionDefinition;
 import com.bitwig.extension.controller.api.ControllerHost;
+
+import java.util.UUID;
 
 import static java.lang.String.format;
 

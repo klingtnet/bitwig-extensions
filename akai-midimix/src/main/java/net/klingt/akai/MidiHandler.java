@@ -2,17 +2,34 @@ package net.klingt.akai;
 
 import com.bitwig.extension.api.util.midi.ShortMidiMessage;
 import com.bitwig.extension.callback.ShortMidiDataReceivedCallback;
-import com.bitwig.extension.controller.api.*;
+import com.bitwig.extension.controller.api.CursorRemoteControlsPage;
+import com.bitwig.extension.controller.api.MasterTrack;
+import com.bitwig.extension.controller.api.RemoteControl;
+import com.bitwig.extension.controller.api.Track;
+import com.bitwig.extension.controller.api.TrackBank;
+import com.bitwig.extension.controller.api.Transport;
+import com.bitwig.extension.controller.api.UserControlBank;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static net.klingt.akai.MidiMix.*;
+import static net.klingt.akai.MidiMix.BANK_LEFT;
+import static net.klingt.akai.MidiMix.BANK_RIGHT;
+import static net.klingt.akai.MidiMix.FADERS;
+import static net.klingt.akai.MidiMix.KNOBS;
+import static net.klingt.akai.MidiMix.KNOBS_TOP_ROW;
+import static net.klingt.akai.MidiMix.MASTER_FADER;
+import static net.klingt.akai.MidiMix.MIDI_RESOLUTION;
+import static net.klingt.akai.MidiMix.MUTE;
+import static net.klingt.akai.MidiMix.REC_ARM;
+import static net.klingt.akai.MidiMix.SOLO;
+import static net.klingt.akai.MidiMix.SOLO_MODE;
+import static net.klingt.akai.MidiMix.indexOf;
+import static net.klingt.akai.MidiMix.isNotIn;
 
 public class MidiHandler implements ShortMidiDataReceivedCallback {
     private final Transport transport;

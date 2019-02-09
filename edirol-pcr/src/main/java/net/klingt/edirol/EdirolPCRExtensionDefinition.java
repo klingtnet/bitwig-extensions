@@ -62,15 +62,15 @@ public class EdirolPCRExtensionDefinition extends ControllerExtensionDefinition 
 
     @Override
     public void listAutoDetectionMidiPortNames(final AutoDetectionMidiPortNamesList list,
-            final PlatformType platformType) {
+                                               final PlatformType platformType) {
         switch (platformType) {
-        case WINDOWS:
-            System.err.println(format("Support for platform '%s' is experimental.", platformType.name()));
-        case MAC:
-            list.add(new String[] { "PCR MIDI IN", "PCR 1", "PCR 2" }, new String[] { "PCR MIDI OUT", "PCR" });
-            break;
-        case LINUX:
-            list.add(new String[] { "PCR MIDI", "PCR 1", "PCR 2" }, new String[] { "PCR MIDI", "PCR 1" });
+            case WINDOWS:
+                System.err.println(format("Support for platform '%s' is experimental.", platformType.name()));
+            case MAC:
+                list.add(new String[]{"PCR MIDI IN", "PCR 1", "PCR 2"}, new String[]{"PCR MIDI OUT", "PCR"});
+                break;
+            case LINUX:
+                list.add(new String[]{"PCR MIDI", "PCR 1", "PCR 2"}, new String[]{"PCR MIDI", "PCR 1"});
         }
     }
 

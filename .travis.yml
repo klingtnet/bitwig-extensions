@@ -1,18 +1,18 @@
 language: java
 env:
-- MAVEN_OPTS=-Dorg.slf4j.simpleLogger.defaultLogLevel=warn
+  - MAVEN_OPTS=-Dorg.slf4j.simpleLogger.defaultLogLevel=warn
 script:
-- mvn install
+  - mvn install
 jdk:
-- openjdk8
+  - openjdk8
 deploy:
   provider: releases
   api_key:
     secure: auRQB8+AC4ZtEIvb4yD3v0W25rhIf7pZT6LIEh5Pauxa/UCHHtZmKFnz56HyqUvZ5TWURPORHAdqwnaKjjJTa9omsHfH6B292nbtwPtbZXnWma+g8ODMNOTUxdh0i8JHmrVCoGNQahtw0C0U3WhJMNgaOq2OfIxB6fYIOxtuuD1TeB2dYTbHkJjirm2JepcgoW8Tmnu9IiduwMRiCziJ5Krk2OHVgxun1I93khOzoPl+v2dd48Dvz1GAdpzloSTy2LDA5dUpbTaT6LmVacSayu5Nastn18rw5VUKHAOuyiMM4MGUurA7EDq+8paaQcPI/gqqm18uqpc0qvWmBXVawQOIgcUBPOKVaSj6Dta/GRHslPD544UpWLggorJ4GSXHzcloNT6CSwj8RvUFdeI0Iv9FCODjNel7Ol9QX8PbzkuTsTpPwtbFYvVxrJHhUHfmVs5h/rgkNfKeagJzC6Zg+GkYv9mAzYXGywwGOHdNbyZX618NqJggOF+R+ufzo5MV2mWs+tiJjom0i/VkTein0jLfo/RuZnEfmSG4/2j9uk04pZh6wsfjJxOJkZXT/v3zshJDESTxZx2J7BIu84GSVZSru6+l7Imu+o9JB33qV2tFaHYYiCV7L+EdOn0SL9+PB9+kgWalcGC7D5M8/zFrAfbH67VHe9NOlL507iQaT8U=
   file:
-  - akai-midimix/target/AKAIMidimix.bwextension
-  - akai-mpk-mini-mk2/target/AkaiMPKMiniMK2.bwextension
-  - edirol-pcr/target/EdirolPCR.bwextension
+    - akai-midimix/target/AKAIMidimix.bwextension
+    - akai-mpk-mini-mk2/target/AkaiMPKMiniMK2.bwextension
+    - edirol-pcr/target/EdirolPCR.bwextension
   skip_cleanup: true
   on:
     tags: true

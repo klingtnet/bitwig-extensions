@@ -11,7 +11,12 @@ import com.bitwig.extension.controller.api.UserControlBank;
 import java.util.stream.IntStream;
 
 import static java.lang.String.format;
-import static net.klingt.akai.MidiMix.*;
+import static net.klingt.akai.MidiMix.BANK_LEFT;
+import static net.klingt.akai.MidiMix.BANK_RIGHT;
+import static net.klingt.akai.MidiMix.MUTE;
+import static net.klingt.akai.MidiMix.REC_ARM;
+import static net.klingt.akai.MidiMix.SOLO;
+import static net.klingt.akai.MidiMix.valueOfIndex;
 
 public class MidimixExtension extends ControllerExtension {
 
@@ -30,7 +35,7 @@ public class MidimixExtension extends ControllerExtension {
                 .createTrackBank(8, 0, 0, false);
         CursorRemoteControlsPage cursorRemoteControlsPage = host.createCursorTrack(0, 0).createCursorDevice().createCursorRemoteControlsPage(8);
         UserControlBank userControls = host.createUserControls(16);
-        IntStream.range(0,16).forEach(idx -> userControls.getControl(idx).setLabel(this.userControlLabel(idx)));
+        IntStream.range(0, 16).forEach(idx -> userControls.getControl(idx).setLabel(this.userControlLabel(idx)));
 
         MidiHandler midiHandler = new MidiHandler(host.createTransport(),
                 host.createMasterTrack(0),
