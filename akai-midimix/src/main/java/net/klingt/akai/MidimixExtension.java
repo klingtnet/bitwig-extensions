@@ -6,9 +6,11 @@ import com.bitwig.extension.controller.api.CursorRemoteControlsPage;
 import com.bitwig.extension.controller.api.MidiOut;
 import com.bitwig.extension.controller.api.Track;
 import com.bitwig.extension.controller.api.TrackBank;
+import com.bitwig.extension.controller.api.UserControlBank;
 
 import java.util.stream.IntStream;
 
+import static java.lang.String.format;
 import static net.klingt.akai.MidiMix.*;
 
 public class MidimixExtension extends ControllerExtension {
@@ -27,11 +29,14 @@ public class MidimixExtension extends ControllerExtension {
                 .getShownTopLevelTrackGroup()
                 .createTrackBank(8, 0, 0, false);
         CursorRemoteControlsPage cursorRemoteControlsPage = host.createCursorTrack(0, 0).createCursorDevice().createCursorRemoteControlsPage(8);
+        UserControlBank userControls = host.createUserControls(16);
+        IntStream.range(0,16).forEach(idx -> userControls.getControl(idx).setLabel(this.userControlLabel(idx)));
 
         MidiHandler midiHandler = new MidiHandler(host.createTransport(),
                 host.createMasterTrack(0),
                 trackBank,
-                cursorRemoteControlsPage
+                cursorRemoteControlsPage,
+                userControls
         );
         host.getMidiInPort(0).setMidiCallback(midiHandler);
         host.getMidiInPort(0).setSysexCallback(midiHandler::sysexReceived);
@@ -39,6 +44,12 @@ public class MidimixExtension extends ControllerExtension {
         registerObservers(trackBank);
 
         host.showPopupNotification("Midimix Initialized");
+    }
+
+    private String userControlLabel(int idx) {
+        int row = (idx / 8) + 1;
+        int num = (idx % 8) + 1;
+        return format("Row %d Knob %d", row, num);
     }
 
     private void registerObservers(TrackBank trackBank) {

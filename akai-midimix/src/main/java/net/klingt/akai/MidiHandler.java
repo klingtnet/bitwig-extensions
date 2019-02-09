@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import static net.klingt.akai.MidiMix.*;
@@ -19,15 +21,17 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
     private final Map<Integer, Consumer<ShortMidiMessage>> noteHandlers;
     private final Map<Integer, Consumer<ShortMidiMessage>> ccHandlers;
     private final CursorRemoteControlsPage cursorRemoteControlsPage;
+    private final UserControlBank userControls;
     private boolean soloMode;
 
-    MidiHandler(Transport transport, MasterTrack masterTrack, TrackBank trackBank, CursorRemoteControlsPage cursorRemoteControlsPage) {
+    MidiHandler(Transport transport, MasterTrack masterTrack, TrackBank trackBank, CursorRemoteControlsPage cursorRemoteControlsPage, UserControlBank userControls) {
         this.transport = transport;
         this.masterTrack = masterTrack;
         this.trackBank = trackBank;
         this.noteHandlers = registerNoteHandlers();
         this.ccHandlers = registerCCHandlers();
         this.cursorRemoteControlsPage = cursorRemoteControlsPage;
+        this.userControls = userControls;
     }
 
     private Map<Integer, Consumer<ShortMidiMessage>> registerCCHandlers() {
@@ -47,10 +51,26 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
             return;
         }
 
-        indexOf(msg.getData1(), KNOBS_TOP_ROW)
-                .filter(i -> i < cursorRemoteControlsPage.getParameterCount())
-                .map(cursorRemoteControlsPage::getParameter)
-                .ifPresent(param -> param.set(msg.getData2(), MIDI_RESOLUTION));
+        Optional<Integer> topRowIdx = indexOf(msg.getData1(), KNOBS_TOP_ROW);
+        if (topRowIdx.isPresent()) {
+            topRowIdx.ifPresent(idx -> handleTopRow(idx, msg.getData2()));
+        } else {
+            handleUserControl(msg);
+        }
+    }
+
+    private void handleUserControl(ShortMidiMessage msg) {
+        indexOf(msg.getData1(), KNOBS)
+                .map(idx -> userControls.getControl(idx - KNOBS_TOP_ROW.length))
+                .ifPresent(param -> param.value().set(msg.getData2(), MIDI_RESOLUTION));
+    }
+
+    private void handleTopRow(Integer idx, Integer value) {
+        if (idx >= cursorRemoteControlsPage.getParameterCount()) {
+            return;
+        }
+        RemoteControl parameter = cursorRemoteControlsPage.getParameter(idx);
+        parameter.set(value, MIDI_RESOLUTION);
     }
 
     private void handleFader(ShortMidiMessage msg) {
