@@ -6,7 +6,7 @@ The controller script was only tested with the [PCR-300](http://www.rolandus.com
 
 ## Troubleshooting
 
-- Aftertouch must be turned off for the hold-pedal to work
+- ~~Aftertouch must be turned off for the hold-pedal to work~~ It showed that the _hold pedal jack_ had a slight connection problem and rotating the plug some degrees fixed the issue.
 
 ## Notes
 
