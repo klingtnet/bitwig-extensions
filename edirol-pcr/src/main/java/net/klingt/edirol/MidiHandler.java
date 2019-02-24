@@ -156,7 +156,10 @@ public class MidiHandler {
         if (msg.isProgramChange()) {
             handleProgramChange(msg);
         } else if (msg.isControlChange()) {
-            handlers.get(HandlerID.of(msg)).accept(msg);
+            HandlerID idx = HandlerID.of(msg);
+            if (handlers.containsKey(idx)) {
+                handlers.get(idx).accept(msg);
+            }
         }
     }
 

@@ -27,7 +27,7 @@ public class EdirolPCRExtensionDefinition extends ControllerExtensionDefinition 
 
     @Override
     public String getVersion() {
-        return "0.2";
+        return "0.2.1";
     }
 
     @Override
