@@ -78,7 +78,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
 
     private void handleUserControl(ShortMidiMessage msg) {
         indexOf(msg.getData1(), KNOBS)
-                .map(idx -> userControls.getControl(idx - KNOBS_TOP_ROW.length))
+                .map(idx -> userControls.getControl(idx - KNOBS.length))
                 .ifPresent(param -> param.value().set(msg.getData2(), MIDI_RESOLUTION));
     }
 
