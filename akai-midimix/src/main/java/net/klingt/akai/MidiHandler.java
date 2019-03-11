@@ -21,6 +21,7 @@ import static net.klingt.akai.MidiMix.BANK_LEFT;
 import static net.klingt.akai.MidiMix.BANK_RIGHT;
 import static net.klingt.akai.MidiMix.FADERS;
 import static net.klingt.akai.MidiMix.KNOBS;
+import static net.klingt.akai.MidiMix.KNOBS_USER;
 import static net.klingt.akai.MidiMix.KNOBS_TOP_ROW;
 import static net.klingt.akai.MidiMix.MASTER_FADER;
 import static net.klingt.akai.MidiMix.MIDI_RESOLUTION;
@@ -77,8 +78,8 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
     }
 
     private void handleUserControl(ShortMidiMessage msg) {
-        indexOf(msg.getData1(), KNOBS)
-                .map(idx -> userControls.getControl(idx - KNOBS_TOP_ROW.length))
+        indexOf(msg.getData1(), KNOBS_USER)
+                .map(idx -> userControls.getControl(idx))
                 .ifPresent(param -> param.value().set(msg.getData2(), MIDI_RESOLUTION));
     }
 
