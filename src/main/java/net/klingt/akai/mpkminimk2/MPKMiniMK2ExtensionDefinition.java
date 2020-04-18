@@ -8,6 +8,7 @@ import com.bitwig.extension.controller.api.ControllerHost;
 import java.util.UUID;
 
 import static java.lang.String.format;
+import static net.klingt.Constants.VERSION;
 
 public class MPKMiniMK2ExtensionDefinition extends ControllerExtensionDefinition {
     private static final UUID DRIVER_ID = UUID.fromString("99943339-fe1e-45b3-bd12-62b119686908");
@@ -27,7 +28,7 @@ public class MPKMiniMK2ExtensionDefinition extends ControllerExtensionDefinition
 
     @Override
     public String getVersion() {
-        return "0.1";
+        return VERSION;
     }
 
     @Override
@@ -47,7 +48,7 @@ public class MPKMiniMK2ExtensionDefinition extends ControllerExtensionDefinition
 
     @Override
     public int getRequiredAPIVersion() {
-        return 5;
+        return 4;
     }
 
     @Override

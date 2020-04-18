@@ -8,6 +8,7 @@ import com.bitwig.extension.controller.api.ControllerHost;
 import java.util.UUID;
 
 import static java.lang.String.format;
+import static net.klingt.Constants.VERSION;
 
 public class EdirolPCRExtensionDefinition extends ControllerExtensionDefinition {
     private static final UUID DRIVER_ID = UUID.fromString("253deb05-198c-443c-bec7-5fa0f44da207");
@@ -27,7 +28,7 @@ public class EdirolPCRExtensionDefinition extends ControllerExtensionDefinition 
 
     @Override
     public String getVersion() {
-        return "0.2.1";
+        return VERSION;
     }
 
     @Override

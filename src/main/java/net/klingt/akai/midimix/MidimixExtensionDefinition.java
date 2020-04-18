@@ -8,6 +8,7 @@ import com.bitwig.extension.controller.api.ControllerHost;
 import java.util.UUID;
 
 import static java.lang.String.format;
+import static net.klingt.Constants.VERSION;
 
 public class MidimixExtensionDefinition extends ControllerExtensionDefinition {
     private static final UUID DRIVER_ID = UUID.fromString("9c561b6b-31bf-401c-aa86-a4a576a13f95");
@@ -27,7 +28,7 @@ public class MidimixExtensionDefinition extends ControllerExtensionDefinition {
 
     @Override
     public String getVersion() {
-        return "0.2";
+        return VERSION;
     }
 
     @Override
