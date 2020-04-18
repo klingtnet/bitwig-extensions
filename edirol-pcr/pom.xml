@@ -21,17 +21,10 @@
     </repositories>
 
     <dependencies>
-        <!--
-        <dependency>
-			<groupId>com.bitwig</groupId>
-			<artifactId>extension-api</artifactId>
-			<version>4</version>
-        </dependency>
-        -->
         <dependency>
             <groupId>com.bitwig</groupId>
             <artifactId>extension-api</artifactId>
-            <version>3</version>
+            <version>11</version>
         </dependency>
     </dependencies>
 
