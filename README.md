@@ -6,7 +6,7 @@ This is a collection of my custom controller extensions, previously called scrip
 
 ## Instructions
 
-The installation is super easy, either you use the precompiled extensions from the [github release page][releases] or you build it yourself, given GNU Make, Maven and Java8+ is available:
+The installation is super easy, either you use the precompiled extension from the [github release page][releases] or you build it yourself, given GNU Make, Maven and Java12+ is available:
 
 ```sh
 $ make install
@@ -14,12 +14,12 @@ $ make install
 
 ## Installation
 
-The recommend installation method is to download a precompiled release from [this projects release page](https://github.com/klingtnet/bitwig-akai-midimix/releases) into your `~/Bitwig Studio/Extensions` folder.
-Note that the `Extensions` path is probably different for Windows or Mac.
+The recommended installation method is to download a precompiled release from [this projects release page](https://github.com/klingtnet/bitwig-extensions/releases) into your `~/Bitwig Studio/Extensions` folder.
+Note that the `Extensions` path is probably different for Windows (`%USERPROFILE%\Documents\Bitwig Studio\Extensions\`) or Mac.
 
 ## Troubleshooting
 
-I only tested the extensions under Linux, so if does not automatically detect them please [open up an issue][issues] and tell me the names of the MIDI controller's ports as shown in Bitwig's controller menu.
+I only tested the extensions under Linux and Windows, so if does not automatically detect them please [open up an issue][issues] and tell me the names of the MIDI controller's ports as shown in Bitwig's controller menu.
 
 [releases]: https://github.com/klingtnet/bitwig-extensions/releases
 [issues]: https://github.com/klingtnet/bitwig-extensions/issues
