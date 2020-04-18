@@ -1,0 +1,1 @@
+xcopy /y target\klingt-net-bitwig-extensions.bwextension "%USERPROFILE%\Documents\Bitwig Studio\Extensions\"
