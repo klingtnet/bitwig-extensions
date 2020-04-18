@@ -125,7 +125,7 @@ public class MidiHandler {
             return;
         }
 
-        cursorDevice.browseToReplaceDevice();
+        cursorDevice.replaceDeviceInsertionPoint();
         popupBrowser.selectPreviousFile();
     }
 
@@ -144,7 +144,7 @@ public class MidiHandler {
             return;
         }
 
-        cursorDevice.browseToReplaceDevice();
+        cursorDevice.replaceDeviceInsertionPoint();
         popupBrowser.selectNextFile();
     }
 
@@ -173,7 +173,7 @@ public class MidiHandler {
             return;
         }
 
-        cursorDevice.browseToReplaceDevice();
+        cursorDevice.replaceDeviceInsertionPoint();
         int delta = msg.getData1() - prevProgramChange;
         if (delta < 0) {
             popupBrowser.selectPreviousFile();
@@ -205,7 +205,7 @@ public class MidiHandler {
             return;
         }
 
-        trackBank.getChannel(channel).getVolume().set(msg.getData2(), MIDI_RESOLUTION);
+        trackBank.getItemAt(channel).volume().set(msg.getData2(), MIDI_RESOLUTION);
     }
 
     private void handleMasterFader(ShortMidiMessage msg) {
@@ -213,7 +213,7 @@ public class MidiHandler {
             return;
         }
 
-        masterTrack.getVolume().set(msg.getData2(), MIDI_RESOLUTION);
+        masterTrack.volume().set(msg.getData2(), MIDI_RESOLUTION);
     }
 
     private void handleCrossfader(ShortMidiMessage msg) {
@@ -221,7 +221,7 @@ public class MidiHandler {
             return;
         }
 
-        transport.getCrossfade().set(msg.getData2(), MIDI_RESOLUTION);
+        transport.crossfade().set(msg.getData2(), MIDI_RESOLUTION);
     }
 
     private void handleTransport(ShortMidiMessage msg) {

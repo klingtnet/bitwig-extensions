@@ -11,12 +11,12 @@ import com.bitwig.extension.controller.api.UserControlBank;
 import java.util.stream.IntStream;
 
 import static java.lang.String.format;
-import static net.klingt.akai.midimix.MidiMix.BANK_LEFT;
-import static net.klingt.akai.midimix.MidiMix.BANK_RIGHT;
-import static net.klingt.akai.midimix.MidiMix.MUTE;
-import static net.klingt.akai.midimix.MidiMix.REC_ARM;
-import static net.klingt.akai.midimix.MidiMix.SOLO;
-import static net.klingt.akai.midimix.MidiMix.valueOfIndex;
+import static net.klingt.akai.midimix.Midimix.BANK_LEFT;
+import static net.klingt.akai.midimix.Midimix.BANK_RIGHT;
+import static net.klingt.akai.midimix.Midimix.MUTE;
+import static net.klingt.akai.midimix.Midimix.REC_ARM;
+import static net.klingt.akai.midimix.Midimix.SOLO;
+import static net.klingt.akai.midimix.Midimix.valueOfIndex;
 
 public class MidimixExtension extends ControllerExtension {
 
@@ -59,17 +59,17 @@ public class MidimixExtension extends ControllerExtension {
 
     private void registerObservers(TrackBank trackBank) {
         IntStream.range(0, trackBank.getSizeOfBank())
-                .filter(i -> trackBank.getChannel(i) != null)
-                .forEach(i -> registerChannelObservers(trackBank.getChannel(i), i));
+                .filter(i -> trackBank.getItemAt(i) != null)
+                .forEach(i -> registerChannelObservers(trackBank.getItemAt(i), i));
 
         trackBank.canScrollBackwards().addValueObserver(new ButtonObserver(BANK_LEFT, midiOut));
         trackBank.canScrollForwards().addValueObserver(new ButtonObserver(BANK_RIGHT, midiOut));
     }
 
     private void registerChannelObservers(Track channel, int index) {
-        valueOfIndex(index, MUTE).ifPresent(buttonNote -> channel.getMute().addValueObserver(new ButtonObserver(buttonNote, midiOut)));
-        valueOfIndex(index, SOLO).ifPresent(buttonNote -> channel.getSolo().addValueObserver(new ButtonObserver(buttonNote, midiOut)));
-        valueOfIndex(index, REC_ARM).ifPresent(buttonNote -> channel.getArm().addValueObserver(new ButtonObserver(buttonNote, midiOut)));
+        valueOfIndex(index, MUTE).ifPresent(buttonNote -> channel.mute().addValueObserver(new ButtonObserver(buttonNote, midiOut)));
+        valueOfIndex(index, SOLO).ifPresent(buttonNote -> channel.solo().addValueObserver(new ButtonObserver(buttonNote, midiOut)));
+        valueOfIndex(index, REC_ARM).ifPresent(buttonNote -> channel.arm().addValueObserver(new ButtonObserver(buttonNote, midiOut)));
     }
 
     @Override

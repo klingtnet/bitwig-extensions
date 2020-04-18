@@ -17,20 +17,20 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static net.klingt.akai.midimix.MidiMix.BANK_LEFT;
-import static net.klingt.akai.midimix.MidiMix.BANK_RIGHT;
-import static net.klingt.akai.midimix.MidiMix.FADERS;
-import static net.klingt.akai.midimix.MidiMix.KNOBS;
-import static net.klingt.akai.midimix.MidiMix.KNOBS_USER;
-import static net.klingt.akai.midimix.MidiMix.KNOBS_TOP_ROW;
-import static net.klingt.akai.midimix.MidiMix.MASTER_FADER;
-import static net.klingt.akai.midimix.MidiMix.MIDI_RESOLUTION;
-import static net.klingt.akai.midimix.MidiMix.MUTE;
-import static net.klingt.akai.midimix.MidiMix.REC_ARM;
-import static net.klingt.akai.midimix.MidiMix.SOLO;
-import static net.klingt.akai.midimix.MidiMix.SOLO_MODE;
-import static net.klingt.akai.midimix.MidiMix.indexOf;
-import static net.klingt.akai.midimix.MidiMix.isNotIn;
+import static net.klingt.akai.midimix.Midimix.BANK_LEFT;
+import static net.klingt.akai.midimix.Midimix.BANK_RIGHT;
+import static net.klingt.akai.midimix.Midimix.FADERS;
+import static net.klingt.akai.midimix.Midimix.KNOBS;
+import static net.klingt.akai.midimix.Midimix.KNOBS_TOP_ROW;
+import static net.klingt.akai.midimix.Midimix.KNOBS_USER;
+import static net.klingt.akai.midimix.Midimix.MASTER_FADER;
+import static net.klingt.akai.midimix.Midimix.MIDI_RESOLUTION;
+import static net.klingt.akai.midimix.Midimix.MUTE;
+import static net.klingt.akai.midimix.Midimix.REC_ARM;
+import static net.klingt.akai.midimix.Midimix.SOLO;
+import static net.klingt.akai.midimix.Midimix.SOLO_MODE;
+import static net.klingt.akai.midimix.Midimix.indexOf;
+import static net.klingt.akai.midimix.Midimix.isNotIn;
 
 public class MidiHandler implements ShortMidiDataReceivedCallback {
     private final Transport transport;
@@ -79,7 +79,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
 
     private void handleUserControl(ShortMidiMessage msg) {
         indexOf(msg.getData1(), KNOBS_USER)
-                .map(idx -> userControls.getControl(idx))
+                .map(userControls::getControl)
                 .ifPresent(param -> param.value().set(msg.getData2(), MIDI_RESOLUTION));
     }
 
@@ -98,8 +98,8 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
 
         indexOf(msg.getData1(), FADERS)
                 .filter(i -> i < trackBank.getSizeOfBank())
-                .map(trackBank::getChannel)
-                .ifPresent(ch -> ch.getVolume().set(msg.getData2(), MIDI_RESOLUTION));
+                .map(trackBank::getItemAt)
+                .ifPresent(ch -> ch.volume().set(msg.getData2(), MIDI_RESOLUTION));
     }
 
     private void handleMasterFader(ShortMidiMessage msg) {
@@ -107,7 +107,7 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
             return;
         }
 
-        masterTrack.getVolume().set(msg.getData2(), MIDI_RESOLUTION);
+        masterTrack.volume().set(msg.getData2(), MIDI_RESOLUTION);
     }
 
     private Map<Integer, Consumer<ShortMidiMessage>> registerNoteHandlers() {
@@ -189,12 +189,12 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
 
         indexOf(msg.getData1(), SOLO)
                 .filter(i -> i < trackBank.getSizeOfBank())
-                .map(trackBank::getChannel)
+                .map(trackBank::getItemAt)
                 .ifPresent(this::toggleSolo);
     }
 
     private void toggleSolo(Track track) {
-        track.getSolo().toggle();
+        track.solo().toggle();
     }
 
     private void handleMute(ShortMidiMessage msg) {
@@ -204,12 +204,12 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
 
         indexOf(msg.getData1(), MUTE)
                 .filter(i -> i < trackBank.getSizeOfBank())
-                .map(trackBank::getChannel)
+                .map(trackBank::getItemAt)
                 .ifPresent(this::toggleMute);
     }
 
     private void toggleMute(Track track) {
-        track.getMute().toggle();
+        track.mute().toggle();
     }
 
     private void handleArm(ShortMidiMessage msg) {
@@ -219,12 +219,12 @@ public class MidiHandler implements ShortMidiDataReceivedCallback {
 
         indexOf(msg.getData1(), REC_ARM)
                 .filter(i -> i < trackBank.getSizeOfBank())
-                .map(trackBank::getChannel)
+                .map(trackBank::getItemAt)
                 .ifPresent(this::toggleArm);
     }
 
     private void toggleArm(Track track) {
-        track.getArm().toggle();
+        track.arm().toggle();
     }
 
     void sysexReceived(final String data) {

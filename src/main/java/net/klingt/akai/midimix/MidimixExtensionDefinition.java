@@ -47,7 +47,7 @@ public class MidimixExtensionDefinition extends ControllerExtensionDefinition {
 
     @Override
     public int getRequiredAPIVersion() {
-        return 4;
+        return 5;
     }
 
     @Override

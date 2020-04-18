@@ -3,7 +3,7 @@ package net.klingt.akai.midimix;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-public class MidiMix {
+public class Midimix {
     static final int[] KNOBS = new int[]{16, 17, 18, 20, 21, 22, 24, 25, 26, 28, 29, 30, 46, 47, 48, 50, 51, 52, 54, 55, 56, 58, 59, 60};
     static final int[] KNOBS_TOP_ROW = new int[]{16, 20, 24, 28, 46, 50, 54, 58};
     static final int[] KNOBS_USER = new int[]{17, 18, 21, 22, 25, 26, 29, 30, 47, 48, 51, 52, 55, 56, 59, 60};

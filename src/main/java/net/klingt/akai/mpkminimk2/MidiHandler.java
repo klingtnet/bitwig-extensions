@@ -14,8 +14,8 @@ import java.util.stream.IntStream;
 
 public class MidiHandler {
     private static final Number MIDI_RESOLUTION = 128;
-    private static int KNOB_OFFSET = 20;
-    private static int PAD_OFFSET = 0;
+    private static final int KNOB_OFFSET = 20;
+    private static final int PAD_OFFSET = 0;
     private final CursorRemoteControlsPage cursorRemoteControlsPage;
     private final Map<HandlerID, Consumer<ShortMidiMessage>> handlers;
     private final PinnableCursorDevice cursorDevice;
