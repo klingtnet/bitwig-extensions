@@ -3,6 +3,7 @@ package net.klingt.akai.mpkminimk2;
 import com.bitwig.extension.api.PlatformType;
 import com.bitwig.extension.controller.AutoDetectionMidiPortNamesList;
 import com.bitwig.extension.controller.ControllerExtensionDefinition;
+import com.bitwig.extension.controller.HardwareDeviceMatcherList;
 import com.bitwig.extension.controller.api.ControllerHost;
 
 import java.util.UUID;
@@ -48,7 +49,7 @@ public class MPKMiniMK2ExtensionDefinition extends ControllerExtensionDefinition
 
     @Override
     public int getRequiredAPIVersion() {
-        return 4;
+        return 10;
     }
 
     @Override
@@ -66,12 +67,20 @@ public class MPKMiniMK2ExtensionDefinition extends ControllerExtensionDefinition
                                                final PlatformType platformType) {
         switch (platformType) {
             case WINDOWS:
+                list.add(new String[]{"MPKMini2"}, new String[]{"MPKMini2"});
+                break;
             case MAC:
+                // TODO: remove, just dont to auto detection.
                 System.err.println(format("Support for platform '%s' is experimental.", platformType.name()));
                 break;
             case LINUX:
                 list.add(new String[]{"MPKmini2 MIDI 1"}, new String[]{"MPKmini2 MIDI 1"});
         }
+    }
+
+    public void listHardwareDevices(final HardwareDeviceMatcherList list) {
+        // this crashes with "device not found" but the ids are correct.
+        //list.add(new UsbDeviceMatcher("Akai MPK mini mk2", "idVendor == 0x2011 && idProduct == 0x0715"));
     }
 
     @Override
