@@ -5,11 +5,9 @@ JAVA_SOURCES:=$(shell find -type f -name '*.java')
 
 all: build
 
-build: akai-midimix/target/AKAIMidimix.bwextension akai-mpk-mini-mk2/target/AkaiMPKMiniMK2.bwextension edirol-pcr/target/EdirolPCR.bwextension
+build: target/klingt-net-bitwig-extensions.bwextension
 
-akai-midimix/target/AKAIMidimix.bwextension: $(JAVA_SOURCES)
-akai-mpk-mini-mk2/target/AkaiMPKMiniMK2.bwextension: $(JAVA_SOURCES)
-edirol-pcr/target/EdirolPCR.bwextension: $(JAVA_SOURCES)
+target/klingt-net-bitwig-extensions.bwextension: $(JAVA_SOURCES)
 	@mvn install
 
 test:
@@ -18,7 +16,7 @@ test:
 debug:
 	BITWIG_DEBUG_PORT=5005 bitwig-studio
 
-install: akai-midimix/target/AKAIMidimix.bwextension akai-mpk-mini-mk2/target/AkaiMPKMiniMK2.bwextension edirol-pcr/target/EdirolPCR.bwextension
+install: target/klingt-net-bitwig-extensions.bwextension
 	@mkdir -p $(EXTENSION_DIR)
 	install -Dm644 $? $(EXTENSION_DIR)
 
