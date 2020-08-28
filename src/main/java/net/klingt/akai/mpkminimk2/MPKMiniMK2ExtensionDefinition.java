@@ -19,7 +19,7 @@ public class MPKMiniMK2ExtensionDefinition extends ControllerExtensionDefinition
 
     @Override
     public String getName() {
-        return "Akai MPK mini mk2";
+        return "MPK mini mk2";
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MPKMiniMK2ExtensionDefinition extends ControllerExtensionDefinition
 
     @Override
     public String getHardwareModel() {
-        return "Akai MPK mini mk2";
+        return "MPK mini mk2";
     }
 
     @Override
