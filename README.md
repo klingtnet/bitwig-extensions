@@ -1,6 +1,9 @@
 # Bitwig Extensions of klingt.net
 
-[![Build Status](https://travis-ci.org/klingtnet/bitwig-extensions.svg?branch=master)](https://travis-ci.org/klingtnet/bitwig-extensions)
+
+![CI](https://github.com/klingtnet/bitwig-extensions/workflows/CI/badge.svg)
+
+[Releases](https://github.com/klingtnet/bitwig-extensions/releases)
 
 This is a collection of my custom controller extensions, previously called scripts, for Bitwig.
 
