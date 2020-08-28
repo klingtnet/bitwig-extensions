@@ -78,11 +78,6 @@ public class MPKMiniMK2ExtensionDefinition extends ControllerExtensionDefinition
         }
     }
 
-    public void listHardwareDevices(final HardwareDeviceMatcherList list) {
-        // this crashes with "device not found" but the ids are correct.
-        //list.add(new UsbDeviceMatcher("Akai MPK mini mk2", "idVendor == 0x2011 && idProduct == 0x0715"));
-    }
-
     @Override
     public MPKMiniMK2Extension createInstance(final ControllerHost host) {
         return new MPKMiniMK2Extension(this, host);

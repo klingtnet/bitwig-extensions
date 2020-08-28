@@ -78,10 +78,6 @@ public class MidimixExtensionDefinition extends ControllerExtensionDefinition {
         }
     }
 
-    public void listHardwareDevices(final HardwareDeviceMatcherList list) {
-        list.add(new UsbDeviceMatcher("AKAI Midimix", "idVendor == 0x09E8 && idProduct == 0x0031"));
-    }
-
     @Override
     public MidimixExtension createInstance(final ControllerHost host) {
         return new MidimixExtension(this, host);
