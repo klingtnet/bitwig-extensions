@@ -6,7 +6,7 @@
     <artifactId>bitwig-extensions</artifactId>
     <packaging>jar</packaging>
     <name>klingt-net bitwig extensions</name>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
