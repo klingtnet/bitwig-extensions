@@ -3,6 +3,8 @@ package net.klingt.akai.midimix;
 import com.bitwig.extension.api.PlatformType;
 import com.bitwig.extension.controller.AutoDetectionMidiPortNamesList;
 import com.bitwig.extension.controller.ControllerExtensionDefinition;
+import com.bitwig.extension.controller.HardwareDeviceMatcherList;
+import com.bitwig.extension.controller.UsbDeviceMatcher;
 import com.bitwig.extension.controller.api.ControllerHost;
 
 import java.util.UUID;
@@ -48,7 +50,7 @@ public class MidimixExtensionDefinition extends ControllerExtensionDefinition {
 
     @Override
     public int getRequiredAPIVersion() {
-        return 5;
+        return 10;
     }
 
     @Override
@@ -68,6 +70,7 @@ public class MidimixExtensionDefinition extends ControllerExtensionDefinition {
             case WINDOWS:
                 portList.add(new String[]{"MIDI Mix"}, new String[]{"MIDI Mix"});
 
+                // TODO: remove, just dont to auto detection.
                 System.err.println(format("Support for platform '%s' is experimental.", platformType.name()));
                 break;
             case LINUX:
