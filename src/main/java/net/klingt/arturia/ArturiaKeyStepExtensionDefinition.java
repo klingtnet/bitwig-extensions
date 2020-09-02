@@ -1,9 +1,8 @@
-package net.klingt.akai.mpkminimk2;
+package net.klingt.arturia;
 
 import com.bitwig.extension.api.PlatformType;
 import com.bitwig.extension.controller.AutoDetectionMidiPortNamesList;
 import com.bitwig.extension.controller.ControllerExtensionDefinition;
-import com.bitwig.extension.controller.HardwareDeviceMatcherList;
 import com.bitwig.extension.controller.api.ControllerHost;
 
 import java.util.UUID;
@@ -11,15 +10,15 @@ import java.util.UUID;
 import static java.lang.String.format;
 import static net.klingt.Constants.VERSION;
 
-public class MPKMiniMK2ExtensionDefinition extends ControllerExtensionDefinition {
-    private static final UUID DRIVER_ID = UUID.fromString("99943339-fe1e-45b3-bd12-62b119686908");
+public class ArturiaKeyStepExtensionDefinition extends ControllerExtensionDefinition {
+    private static final UUID DRIVER_ID = UUID.fromString("895c9e8a-2d9d-4044-8372-5f72bd464985");
 
-    public MPKMiniMK2ExtensionDefinition() {
+    public ArturiaKeyStepExtensionDefinition() {
     }
 
     @Override
     public String getName() {
-        return "MPK mini mk2";
+        return "KeyStep";
     }
 
     @Override
@@ -39,12 +38,12 @@ public class MPKMiniMK2ExtensionDefinition extends ControllerExtensionDefinition
 
     @Override
     public String getHardwareVendor() {
-        return "Akai";
+        return "Arturia";
     }
 
     @Override
     public String getHardwareModel() {
-        return "MPK mini mk2";
+        return "KeyStep";
     }
 
     @Override
@@ -66,20 +65,19 @@ public class MPKMiniMK2ExtensionDefinition extends ControllerExtensionDefinition
     public void listAutoDetectionMidiPortNames(final AutoDetectionMidiPortNamesList list,
                                                final PlatformType platformType) {
         switch (platformType) {
-            case WINDOWS:
-                list.add(new String[]{"MPKMini2"}, new String[]{"MPKMini2"});
-                break;
             case MAC:
-                // TODO: remove, just dont to auto detection.
                 System.err.println(format("Support for platform '%s' is experimental.", platformType.name()));
                 break;
+            case WINDOWS:
+                list.add(new String[]{"Arturia KeyStep 32"}, new String[]{"Arturia KeyStep 32"});
+                break;
             case LINUX:
-                list.add(new String[]{"MPKmini2 MIDI 1"}, new String[]{"MPKmini2 MIDI 1"});
+                list.add(new String[]{"Arturia KeyStep 32 MIDI 1"}, new String[]{"Arturia KeyStep 32 MIDI 1"});
         }
     }
 
     @Override
-    public MPKMiniMK2Extension createInstance(final ControllerHost host) {
-        return new MPKMiniMK2Extension(this, host);
+    public ArturiaKeyStepExtension createInstance(final ControllerHost host) {
+        return new ArturiaKeyStepExtension(this, host);
     }
 }

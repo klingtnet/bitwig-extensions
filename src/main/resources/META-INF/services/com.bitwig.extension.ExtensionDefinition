@@ -1,4 +1,5 @@
 net.klingt.akai.mpkminimk2.MPKMiniMK2ExtensionDefinition
 net.klingt.akai.midimix.MidimixExtensionDefinition
+net.klingt.arturia.ArturiaKeyStepExtensionDefinition
 net.klingt.edirol.pcr.EdirolPCRExtensionDefinition
 
